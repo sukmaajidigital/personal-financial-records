@@ -4,6 +4,8 @@ import {
     ArrowDownCircle,
     ArrowUpCircle,
     DollarSign,
+    FolderOpen,
+    Plus,
     Receipt,
     TrendingUp,
     Wallet,
@@ -90,6 +92,22 @@ const totalExpenseCategory = computed(() => {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-col gap-6 p-4 md:p-6">
+            <!-- Quick Actions (Mobile) -->
+            <div class="grid grid-cols-2 gap-3 md:hidden">
+                <Button as-child size="lg" class="w-full">
+                    <Link href="/transactions/create">
+                        <Plus class="mr-2 size-4" />
+                        Tambah Transaksi
+                    </Link>
+                </Button>
+                <Button as-child variant="outline" size="lg" class="w-full">
+                    <Link href="/categories">
+                        <FolderOpen class="mr-2 size-4" />
+                        Kategori
+                    </Link>
+                </Button>
+            </div>
+
             <!-- Summary Cards -->
             <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <Card>
