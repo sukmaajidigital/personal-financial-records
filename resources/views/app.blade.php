@@ -33,6 +33,20 @@
 
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
+    {{-- Default SEO meta tags (overridden by Inertia Head on specific pages) --}}
+    <meta name="description" content="Finsu - Aplikasi pencatatan keuangan pribadi gratis. Lacak pemasukan, pengeluaran, dan analisis pola keuangan Anda." inertia>
+    <meta property="og:type" content="website" inertia>
+    <meta property="og:title" content="{{ config('app.name', 'Finsu') }} - Aplikasi Pencatatan Keuangan Pribadi" inertia>
+    <meta property="og:description" content="Lacak pemasukan, pengeluaran, dan analisis pola keuangan Anda secara visual. Gratis dan mudah digunakan." inertia>
+    <meta property="og:image" content="{{ url('/logo/finsu.png') }}" inertia>
+    <meta property="og:url" content="{{ url('/') }}" inertia>
+    <meta property="og:locale" content="id_ID" inertia>
+    <meta property="og:site_name" content="Finsu" inertia>
+    <meta name="twitter:card" content="summary_large_image" inertia>
+    <meta name="twitter:title" content="{{ config('app.name', 'Finsu') }} - Aplikasi Pencatatan Keuangan Pribadi" inertia>
+    <meta name="twitter:description" content="Lacak pemasukan, pengeluaran, dan analisis pola keuangan Anda secara visual. Gratis dan mudah digunakan." inertia>
+    <meta name="twitter:image" content="{{ url('/logo/finsu.png') }}" inertia>
+
     <link rel="icon" href="/logo/finsu.ico" sizes="any">
     <link rel="icon" href="/logo/finsu.png" type="image/png">
     <link rel="apple-touch-icon" href="/logo/finsu.png">

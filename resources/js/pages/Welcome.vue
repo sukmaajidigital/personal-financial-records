@@ -1,5 +1,6 @@
 ﻿<script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { dashboard, login, register } from '@/routes';
 import {
     ArrowDownRight,
@@ -23,6 +24,16 @@ withDefaults(
         canRegister: true,
     },
 );
+
+const page = usePage();
+const baseUrl = computed(() => {
+    const props = page.props as Record<string, unknown>;
+    const ziggy = props.ziggy as { url?: string } | undefined;
+    const url = ziggy?.url ?? window.location.origin;
+    return url.replace(/\/$/, '');
+});
+const ogImage = computed(() => `${baseUrl.value}/logo/finsu.png`);
+const currentUrl = computed(() => `${baseUrl.value}${page.url}`);
 
 // Dummy data - not from database
 const summaryCards = [
@@ -194,7 +205,72 @@ function formatCurrency(n: number): string {
 </script>
 
 <template>
-    <Head title="Personal Financial Records">
+    <Head title="Finsu - Aplikasi Pencatatan Keuangan Pribadi">
+        <!-- SEO Meta -->
+        <meta
+            head-key="description"
+            name="description"
+            content="Finsu adalah aplikasi pencatatan keuangan pribadi gratis. Lacak pemasukan, pengeluaran, dan analisis pola keuangan Anda secara visual dan terorganisir."
+        />
+        <meta
+            name="keywords"
+            content="pencatatan keuangan, keuangan pribadi, financial records, expense tracker, pemasukan, pengeluaran, manajemen uang, finsu"
+        />
+        <meta name="author" content="sukmaajidigital" />
+        <meta name="robots" content="index, follow" />
+        <meta name="language" content="Indonesian" />
+
+        <!-- Open Graph / Facebook -->
+        <meta head-key="og:type" property="og:type" content="website" />
+        <meta
+            head-key="og:title"
+            property="og:title"
+            content="Finsu - Aplikasi Pencatatan Keuangan Pribadi"
+        />
+        <meta
+            head-key="og:description"
+            property="og:description"
+            content="Lacak pemasukan, pengeluaran, dan analisis pola keuangan Anda secara visual. Gratis dan mudah digunakan."
+        />
+        <meta head-key="og:url" property="og:url" :content="currentUrl" />
+        <meta head-key="og:image" property="og:image" :content="ogImage" />
+        <meta
+            head-key="og:image:width"
+            property="og:image:width"
+            content="512"
+        />
+        <meta
+            head-key="og:image:height"
+            property="og:image:height"
+            content="512"
+        />
+        <meta head-key="og:locale" property="og:locale" content="id_ID" />
+        <meta head-key="og:site_name" property="og:site_name" content="Finsu" />
+
+        <!-- Twitter Card -->
+        <meta
+            head-key="twitter:card"
+            name="twitter:card"
+            content="summary_large_image"
+        />
+        <meta
+            head-key="twitter:title"
+            name="twitter:title"
+            content="Finsu - Aplikasi Pencatatan Keuangan Pribadi"
+        />
+        <meta
+            head-key="twitter:description"
+            name="twitter:description"
+            content="Lacak pemasukan, pengeluaran, dan analisis pola keuangan Anda secara visual. Gratis dan mudah digunakan."
+        />
+        <meta
+            head-key="twitter:image"
+            name="twitter:image"
+            :content="ogImage"
+        />
+
+        <!-- Canonical -->
+        <link rel="canonical" :href="currentUrl" />
         <link rel="preconnect" href="https://rsms.me/" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
     </Head>
