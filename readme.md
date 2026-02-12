@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/logo/logo.svg" width="80" alt="Personal Financial Records Logo">
+  <img src="public/logo/finsu.png" width="80" alt="Personal Financial Records Logo">
 </p>
 
 <h1 align="center">Personal Financial Records</h1>
@@ -194,7 +194,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/personal-financial-records.git
+git clone https://github.com/sukmaajidigital/personal-financial-records.git
 cd personal-financial-records
 ```
 
