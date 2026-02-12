@@ -50,6 +50,12 @@
     <link rel="icon" href="/logo/finsu.ico" sizes="any">
     <link rel="icon" href="/logo/finsu.png" type="image/png">
     <link rel="apple-touch-icon" href="/logo/finsu.png">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#059669">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="FinSu">
 
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />

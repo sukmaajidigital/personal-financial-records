@@ -1,0 +1,66 @@
+{
+    "name": "FinSu - Personal Financial Records",
+    "short_name": "FinSu",
+    "description": "Aplikasi pencatatan keuangan pribadi. Lacak pemasukan, pengeluaran, dan analisis pola keuangan Anda.",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#059669",
+    "orientation": "any",
+    "scope": "/",
+    "lang": "id",
+    "categories": ["finance", "productivity"],
+    "icons": [
+        {
+            "src": "/logo/finsu.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/logo/finsu.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "screenshots": [],
+    "shortcuts": [
+        {
+            "name": "Dashboard",
+            "short_name": "Dashboard",
+            "url": "/dashboard",
+            "icons": [
+                {
+                    "src": "/logo/finsu.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "Transaksi",
+            "short_name": "Transaksi",
+            "url": "/transactions",
+            "icons": [
+                {
+                    "src": "/logo/finsu.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "Kategori",
+            "short_name": "Kategori",
+            "url": "/categories",
+            "icons": [
+                {
+                    "src": "/logo/finsu.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }
+            ]
+        }
+    ]
+}
