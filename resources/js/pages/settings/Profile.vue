@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import { Form, Head, Link, usePage } from '@inertiajs/vue3';
+import { Form, Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Camera, Trash2 } from 'lucide-vue-next';
+import { computed, ref } from 'vue';
+import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/DeleteUser.vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useInitials } from '@/composables/useInitials';
 import AppLayout from '@/layouts/AppLayout.vue';
 import SettingsLayout from '@/layouts/settings/Layout.vue';
-import { type BreadcrumbItem } from '@/types';
-import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import { edit } from '@/routes/profile';
 import { send } from '@/routes/verification';
+import { type BreadcrumbItem } from '@/types';
 
 type Props = {
     mustVerifyEmail: boolean;
@@ -31,6 +35,25 @@ const breadcrumbItems: BreadcrumbItem[] = [
 
 const page = usePage();
 const user = page.props.auth.user;
+const { getInitials } = useInitials();
+
+const avatarPreview = ref<string | null>(null);
+const avatarInput = ref<HTMLInputElement | null>(null);
+
+const displayAvatar = computed(() => avatarPreview.value || user.avatar || '');
+const showAvatar = computed(() => displayAvatar.value !== '');
+
+function onAvatarChange(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (file) {
+        avatarPreview.value = URL.createObjectURL(file);
+    }
+}
+
+function triggerAvatarInput() {
+    avatarInput.value?.click();
+}
 </script>
 
 <template>
@@ -44,7 +67,7 @@ const user = page.props.auth.user;
                 <Heading
                     variant="small"
                     title="Profile information"
-                    description="Update your name and email address"
+                    description="Update your name, email address, and avatar"
                 />
 
                 <Form
@@ -52,6 +75,78 @@ const user = page.props.auth.user;
                     class="space-y-6"
                     v-slot="{ errors, processing, recentlySuccessful }"
                 >
+                    <!-- Avatar Section -->
+                    <div class="flex items-center gap-6">
+                        <div class="relative">
+                            <Avatar
+                                class="h-20 w-20 overflow-hidden rounded-full"
+                            >
+                                <AvatarImage
+                                    v-if="showAvatar"
+                                    :src="displayAvatar"
+                                    :alt="user.name"
+                                />
+                                <AvatarFallback
+                                    class="rounded-full bg-neutral-200 text-lg font-semibold text-black dark:bg-neutral-700 dark:text-white"
+                                >
+                                    {{ getInitials(user.name) }}
+                                </AvatarFallback>
+                            </Avatar>
+                            <button
+                                type="button"
+                                @click="triggerAvatarInput"
+                                class="absolute right-0 bottom-0 flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-primary text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 dark:border-neutral-800"
+                            >
+                                <Camera class="h-3.5 w-3.5" />
+                            </button>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-sm font-medium">Profile photo</p>
+                            <p class="text-xs text-muted-foreground">
+                                JPG, JPEG, PNG or WebP. Max 2MB.
+                            </p>
+                            <div class="flex gap-2">
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    @click="triggerAvatarInput"
+                                >
+                                    Change
+                                </Button>
+                                <Button
+                                    v-if="user.avatar && !isGoogleUser"
+                                    type="submit"
+                                    variant="ghost"
+                                    size="sm"
+                                    class="text-destructive hover:text-destructive"
+                                    @click.prevent="
+                                        router.post(
+                                            ProfileController.update.url(),
+                                            {
+                                                remove_avatar: true,
+                                                name: user.name,
+                                                email: user.email,
+                                            },
+                                            { preserveScroll: true },
+                                        )
+                                    "
+                                >
+                                    <Trash2 class="mr-1 h-3.5 w-3.5" />
+                                    Remove
+                                </Button>
+                            </div>
+                        </div>
+                        <input
+                            ref="avatarInput"
+                            type="file"
+                            name="avatar"
+                            class="hidden"
+                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                            @change="onAvatarChange"
+                        />
+                        <InputError class="mt-2" :message="errors.avatar" />
+                    </div>
                     <div class="grid gap-2">
                         <Label for="name">Name</Label>
                         <Input
