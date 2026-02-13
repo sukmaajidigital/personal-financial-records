@@ -11,6 +11,11 @@ import { type BreadcrumbItem } from '@/types';
 import PasswordController from '@/actions/App/Http/Controllers/Settings/PasswordController';
 import { edit } from '@/routes/user-password';
 
+defineProps<{
+    isGoogleUser: boolean;
+    hasPassword: boolean;
+}>();
+
 const breadcrumbItems: BreadcrumbItem[] = [
     {
         title: 'Password settings',
@@ -29,8 +34,12 @@ const breadcrumbItems: BreadcrumbItem[] = [
             <div class="space-y-6">
                 <Heading
                     variant="small"
-                    title="Update password"
-                    description="Ensure your account is using a long, random password to stay secure"
+                    :title="hasPassword ? 'Update password' : 'Set password'"
+                    :description="
+                        hasPassword
+                            ? 'Ensure your account is using a long, random password to stay secure'
+                            : 'Your account was created via Google. Set a password to also be able to log in with email and password.'
+                    "
                 />
 
                 <Form
@@ -47,7 +56,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
                     class="space-y-6"
                     v-slot="{ errors, processing, recentlySuccessful }"
                 >
-                    <div class="grid gap-2">
+                    <div v-if="hasPassword" class="grid gap-2">
                         <Label for="current_password">Current password</Label>
                         <Input
                             id="current_password"
