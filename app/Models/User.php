@@ -64,6 +64,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Disable Laravel's default email verification notification.
+     * We use our own code-based verification via EmailVerificationCodeNotification,
+     * sent explicitly in CreateNewUser. Google users are auto-verified.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        // Do nothing — verification code is sent in CreateNewUser::create()
+    }
+
+    /**
      * @return HasOne<EmailVerificationCode, $this>
      */
     public function emailVerificationCode(): HasOne

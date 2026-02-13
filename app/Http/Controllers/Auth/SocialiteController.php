@@ -66,8 +66,10 @@ class SocialiteController extends Controller
             'google_id' => $googleUser->getId(),
             'avatar' => $googleUser->getAvatar(),
             'password' => null,
-            'email_verified_at' => now(), // Google already verified the email
         ]);
+
+        // Mark email as verified — Google already verified it
+        $user->markEmailAsVerified();
 
         Auth::login($user, remember: true);
 

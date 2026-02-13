@@ -22,6 +22,8 @@ class ProfileController extends Controller
         return Inertia::render('settings/Profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
+            'isGoogleUser' => $request->user()->isGoogleUser(),
+            'hasPassword' => $request->user()->password !== null,
         ]);
     }
 
