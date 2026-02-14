@@ -4,13 +4,15 @@ import {
     ArrowDownCircle,
     ArrowUpCircle,
     DollarSign,
+    Eye,
+    EyeOff,
     FolderOpen,
     Plus,
     Receipt,
     TrendingUp,
     Wallet,
 } from 'lucide-vue-next';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -72,6 +74,16 @@ function formatMonth(month: string): string {
     return new Intl.DateTimeFormat('id-ID', { month: 'short' }).format(date);
 }
 
+const showSaldo = ref(false);
+const showIncome = ref(false);
+const showExpense = ref(false);
+const showTrend = ref(false);
+const showCategory = ref(false);
+const showTransactions = ref(false);
+
+const masked = 'Rp ••••••••';
+const maskedShort = '••••••';
+
 const maxTrendValue = computed(() => {
     return Math.max(
         ...props.monthlyTrend.flatMap((t) => [
@@ -117,18 +129,33 @@ const totalExpenseCategory = computed(() => {
                         <CardTitle class="text-sm font-medium"
                             >Saldo Total</CardTitle
                         >
-                        <Wallet class="size-4 text-muted-foreground" />
+                        <div class="flex items-center gap-1">
+                            <button
+                                class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                @click="showSaldo = !showSaldo"
+                            >
+                                <Eye v-if="showSaldo" class="size-3.5" />
+                                <EyeOff v-else class="size-3.5" />
+                            </button>
+                            <Wallet class="size-4 text-muted-foreground" />
+                        </div>
                     </CardHeader>
                     <CardContent>
                         <div
-                            class="text-2xl font-bold"
-                            :class="
-                                props.summary.balance >= 0
-                                    ? 'text-green-600'
-                                    : 'text-red-600'
-                            "
+                            class="text-2xl font-bold transition-all"
+                            :class="[
+                                showSaldo
+                                    ? props.summary.balance >= 0
+                                        ? 'text-green-600'
+                                        : 'text-red-600'
+                                    : 'text-muted-foreground select-none',
+                            ]"
                         >
-                            {{ formatCurrency(props.summary.balance) }}
+                            {{
+                                showSaldo
+                                    ? formatCurrency(props.summary.balance)
+                                    : masked
+                            }}
                         </div>
                         <p class="text-xs text-muted-foreground">
                             Seluruh waktu
@@ -143,11 +170,31 @@ const totalExpenseCategory = computed(() => {
                         <CardTitle class="text-sm font-medium"
                             >Pemasukan Bulan Ini</CardTitle
                         >
-                        <TrendingUp class="size-4 text-green-600" />
+                        <div class="flex items-center gap-1">
+                            <button
+                                class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                @click="showIncome = !showIncome"
+                            >
+                                <Eye v-if="showIncome" class="size-3.5" />
+                                <EyeOff v-else class="size-3.5" />
+                            </button>
+                            <TrendingUp class="size-4 text-green-600" />
+                        </div>
                     </CardHeader>
                     <CardContent>
-                        <div class="text-2xl font-bold text-green-600">
-                            {{ formatCurrency(props.summary.totalIncome) }}
+                        <div
+                            class="text-2xl font-bold transition-all"
+                            :class="
+                                showIncome
+                                    ? 'text-green-600'
+                                    : 'text-muted-foreground select-none'
+                            "
+                        >
+                            {{
+                                showIncome
+                                    ? formatCurrency(props.summary.totalIncome)
+                                    : masked
+                            }}
                         </div>
                         <p class="text-xs text-muted-foreground">
                             Bulan berjalan
@@ -162,11 +209,31 @@ const totalExpenseCategory = computed(() => {
                         <CardTitle class="text-sm font-medium"
                             >Pengeluaran Bulan Ini</CardTitle
                         >
-                        <DollarSign class="size-4 text-red-600" />
+                        <div class="flex items-center gap-1">
+                            <button
+                                class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                                @click="showExpense = !showExpense"
+                            >
+                                <Eye v-if="showExpense" class="size-3.5" />
+                                <EyeOff v-else class="size-3.5" />
+                            </button>
+                            <DollarSign class="size-4 text-red-600" />
+                        </div>
                     </CardHeader>
                     <CardContent>
-                        <div class="text-2xl font-bold text-red-600">
-                            {{ formatCurrency(props.summary.totalExpense) }}
+                        <div
+                            class="text-2xl font-bold transition-all"
+                            :class="
+                                showExpense
+                                    ? 'text-red-600'
+                                    : 'text-muted-foreground select-none'
+                            "
+                        >
+                            {{
+                                showExpense
+                                    ? formatCurrency(props.summary.totalExpense)
+                                    : masked
+                            }}
                         </div>
                         <p class="text-xs text-muted-foreground">
                             Bulan berjalan
@@ -196,12 +263,23 @@ const totalExpenseCategory = computed(() => {
             <div class="grid gap-4 lg:grid-cols-5">
                 <!-- Monthly Trend (Bar chart) -->
                 <Card class="lg:col-span-3">
-                    <CardHeader>
-                        <CardTitle>Tren Bulanan</CardTitle>
-                        <CardDescription
-                            >Pemasukan vs Pengeluaran (6 bulan
-                            terakhir)</CardDescription
+                    <CardHeader
+                        class="flex flex-row items-start justify-between"
+                    >
+                        <div class="space-y-1">
+                            <CardTitle>Tren Bulanan</CardTitle>
+                            <CardDescription
+                                >Pemasukan vs Pengeluaran (6 bulan
+                                terakhir)</CardDescription
+                            >
+                        </div>
+                        <button
+                            class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            @click="showTrend = !showTrend"
                         >
+                            <Eye v-if="showTrend" class="size-4" />
+                            <EyeOff v-else class="size-4" />
+                        </button>
                     </CardHeader>
                     <CardContent>
                         <div
@@ -225,16 +303,20 @@ const totalExpenseCategory = computed(() => {
                                     <div class="flex gap-3 text-xs">
                                         <span class="text-green-600"
                                             >+{{
-                                                formatCurrency(
-                                                    Number(trend.income),
-                                                )
+                                                showTrend
+                                                    ? formatCurrency(
+                                                          Number(trend.income),
+                                                      )
+                                                    : maskedShort
                                             }}</span
                                         >
                                         <span class="text-red-600"
                                             >-{{
-                                                formatCurrency(
-                                                    Number(trend.expense),
-                                                )
+                                                showTrend
+                                                    ? formatCurrency(
+                                                          Number(trend.expense),
+                                                      )
+                                                    : maskedShort
                                             }}</span
                                         >
                                     </div>
@@ -268,9 +350,20 @@ const totalExpenseCategory = computed(() => {
 
                 <!-- Expense by Category -->
                 <Card class="lg:col-span-2">
-                    <CardHeader>
-                        <CardTitle>Pengeluaran per Kategori</CardTitle>
-                        <CardDescription>Bulan ini</CardDescription>
+                    <CardHeader
+                        class="flex flex-row items-start justify-between"
+                    >
+                        <div class="space-y-1">
+                            <CardTitle>Pengeluaran per Kategori</CardTitle>
+                            <CardDescription>Bulan ini</CardDescription>
+                        </div>
+                        <button
+                            class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            @click="showCategory = !showCategory"
+                        >
+                            <Eye v-if="showCategory" class="size-4" />
+                            <EyeOff v-else class="size-4" />
+                        </button>
                     </CardHeader>
                     <CardContent>
                         <div
@@ -298,7 +391,11 @@ const totalExpenseCategory = computed(() => {
                                         <span>{{ category.name }}</span>
                                     </div>
                                     <span class="font-medium">{{
-                                        formatCurrency(Number(category.total))
+                                        showCategory
+                                            ? formatCurrency(
+                                                  Number(category.total),
+                                              )
+                                            : maskedShort
                                     }}</span>
                                 </div>
                                 <div
@@ -327,9 +424,18 @@ const totalExpenseCategory = computed(() => {
                             >5 transaksi terakhir Anda</CardDescription
                         >
                     </div>
-                    <Button variant="outline" size="sm" as-child>
-                        <Link href="/transactions">Lihat Semua</Link>
-                    </Button>
+                    <div class="flex items-center gap-2">
+                        <button
+                            class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            @click="showTransactions = !showTransactions"
+                        >
+                            <Eye v-if="showTransactions" class="size-4" />
+                            <EyeOff v-else class="size-4" />
+                        </button>
+                        <Button variant="outline" size="sm" as-child>
+                            <Link href="/transactions">Lihat Semua</Link>
+                        </Button>
+                    </div>
                 </CardHeader>
                 <CardContent class="p-0">
                     <!-- Mobile -->
@@ -375,15 +481,25 @@ const totalExpenseCategory = computed(() => {
                             <span
                                 class="text-sm font-semibold"
                                 :class="
-                                    transaction.type === 'income'
-                                        ? 'text-green-600'
-                                        : 'text-red-600'
+                                    showTransactions
+                                        ? transaction.type === 'income'
+                                            ? 'text-green-600'
+                                            : 'text-red-600'
+                                        : 'text-muted-foreground select-none'
                                 "
                             >
-                                {{ transaction.type === 'income' ? '+' : '-'
-                                }}{{
-                                    formatCurrency(Number(transaction.amount))
-                                }}
+                                <template v-if="showTransactions">
+                                    {{
+                                        transaction.type === 'income'
+                                            ? '+'
+                                            : '-'
+                                    }}{{
+                                        formatCurrency(
+                                            Number(transaction.amount),
+                                        )
+                                    }}
+                                </template>
+                                <template v-else>{{ masked }}</template>
                             </span>
                         </div>
                     </div>
@@ -457,20 +573,25 @@ const totalExpenseCategory = computed(() => {
                                     <TableCell
                                         class="text-right font-semibold"
                                         :class="
-                                            transaction.type === 'income'
-                                                ? 'text-green-600'
-                                                : 'text-red-600'
+                                            showTransactions
+                                                ? transaction.type === 'income'
+                                                    ? 'text-green-600'
+                                                    : 'text-red-600'
+                                                : 'text-muted-foreground select-none'
                                         "
                                     >
-                                        {{
-                                            transaction.type === 'income'
-                                                ? '+'
-                                                : '-'
-                                        }}{{
-                                            formatCurrency(
-                                                Number(transaction.amount),
-                                            )
-                                        }}
+                                        <template v-if="showTransactions">
+                                            {{
+                                                transaction.type === 'income'
+                                                    ? '+'
+                                                    : '-'
+                                            }}{{
+                                                formatCurrency(
+                                                    Number(transaction.amount),
+                                                )
+                                            }}
+                                        </template>
+                                        <template v-else>{{ masked }}</template>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>
