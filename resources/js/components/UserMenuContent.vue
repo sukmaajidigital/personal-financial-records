@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3';
-import { LogOut, Settings } from 'lucide-vue-next';
+import { Home, LogOut, Settings } from 'lucide-vue-next';
 import {
     DropdownMenuGroup,
     DropdownMenuItem,
@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import UserInfo from '@/components/UserInfo.vue';
 import type { User } from '@/types';
-import { logout } from '@/routes';
+import { home, logout } from '@/routes';
 import { edit } from '@/routes/profile';
 
 type Props = {
@@ -38,6 +38,17 @@ defineProps<Props>();
             </Link>
         </DropdownMenuItem>
     </DropdownMenuGroup>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem :as-child="true">
+        <Link
+            class="block w-full cursor-pointer"
+            :href="home()"
+            data-test="home-button"
+        >
+            <Home class="mr-2 h-4 w-4" />
+            Home Page
+        </Link>
+    </DropdownMenuItem>
     <DropdownMenuSeparator />
     <DropdownMenuItem :as-child="true">
         <Link
