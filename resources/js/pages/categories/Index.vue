@@ -145,11 +145,6 @@ function submitDelete() {
                 {{ (page.props.errors as Record<string, string>).category }}
             </div>
 
-            <!-- Success message -->
-            <div v-if="page.props.flash && (page.props.flash as Record<string, string>).success" class="rounded-md border border-green-500/50 bg-green-50 p-3 text-sm text-green-700 dark:bg-green-950/20 dark:text-green-400">
-                {{ (page.props.flash as Record<string, string>).success }}
-            </div>
-
             <Card>
                 <CardContent class="p-0">
                     <!-- Mobile cards -->
