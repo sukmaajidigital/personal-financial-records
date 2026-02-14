@@ -1,8 +1,7 @@
-import { createInertiaApp, router } from '@inertiajs/vue3';
+import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import type { DefineComponent } from 'vue';
 import { createApp, h } from 'vue';
-import { toast } from 'vue-sonner';
 import '../css/app.css';
 import { initializeTheme } from './composables/useAppearance';
 
@@ -16,22 +15,13 @@ createInertiaApp({
             import.meta.glob<DefineComponent>('./pages/**/*.vue'),
         ),
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .mount(el);
+        const app = createApp({ render: () => h(App, props) });
+        app.use(plugin);
+        app.mount(el);
     },
     progress: {
         color: '#22c55e',
     },
-});
-
-// Global flash message handler — show toast on every Inertia page visit
-router.on('finish', () => {
-    const page = router.page as { props?: { flash?: { success?: string } } };
-    const message = page?.props?.flash?.success;
-    if (message) {
-        toast.success(message, { duration: 2000 });
-    }
 });
 
 // This will set light / dark mode on page load...

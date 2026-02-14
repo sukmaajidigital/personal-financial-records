@@ -2,6 +2,8 @@
 
 @import 'tw-animate-css';
 
+@import 'vue-sonner/style.css';
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
@@ -169,4 +171,9 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+
+[data-sonner-toaster] {
+    z-index: 99999 !important;
+    position: fixed !important;
 }
