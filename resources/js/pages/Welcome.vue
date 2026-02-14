@@ -988,6 +988,19 @@ function formatCurrency(n: number): string {
                 </Link>
             </div>
         </section>
+        <div class="mx-auto max-w-7xl px-4 pb-10 text-center sm:px-6 lg:px-8">
+            <a
+                href="https://github.com/sukmaajidigital/personal-financial-records"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-5 py-2 text-sm font-medium text-gray-700 shadow transition hover:bg-gray-100 dark:border-[#2E2E2A] dark:bg-[#161615] dark:text-[#EDEDEC] dark:hover:bg-[#232321]"
+            >
+                or
+                <br />
+                <Github class="h-4 w-4" />
+                Show Code
+            </a>
+        </div>
 
         <!-- Footer -->
         <footer class="border-t border-gray-200 dark:border-[#2E2E2A]">
