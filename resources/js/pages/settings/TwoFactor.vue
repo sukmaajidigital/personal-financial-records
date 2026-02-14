@@ -2,6 +2,7 @@
 import { Form, Head } from '@inertiajs/vue3';
 import { ShieldBan, ShieldCheck } from 'lucide-vue-next';
 import { onUnmounted, ref } from 'vue';
+import { toast } from 'vue-sonner';
 import Heading from '@/components/Heading.vue';
 import TwoFactorRecoveryCodes from '@/components/TwoFactorRecoveryCodes.vue';
 import TwoFactorSetupModal from '@/components/TwoFactorSetupModal.vue';
@@ -36,6 +37,19 @@ const showSetupModal = ref<boolean>(false);
 onUnmounted(() => {
     clearTwoFactorAuthData();
 });
+
+function onEnableSuccess() {
+    showSetupModal.value = true;
+    toast.success('Autentikasi dua faktor berhasil diaktifkan.', {
+        duration: 2000,
+    });
+}
+
+function onDisableSuccess() {
+    toast.success('Autentikasi dua faktor berhasil dinonaktifkan.', {
+        duration: 2000,
+    });
+}
 </script>
 
 <template>
@@ -75,7 +89,7 @@ onUnmounted(() => {
                         <Form
                             v-else
                             v-bind="enable.form()"
-                            @success="showSetupModal = true"
+                            @success="onEnableSuccess"
                             #default="{ processing }"
                         >
                             <Button type="submit" :disabled="processing">
@@ -101,7 +115,11 @@ onUnmounted(() => {
                     <TwoFactorRecoveryCodes />
 
                     <div class="relative inline">
-                        <Form v-bind="disable.form()" #default="{ processing }">
+                        <Form
+                            v-bind="disable.form()"
+                            @success="onDisableSuccess"
+                            #default="{ processing }"
+                        >
                             <Button
                                 variant="destructive"
                                 type="submit"
