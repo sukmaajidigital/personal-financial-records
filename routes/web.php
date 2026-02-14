@@ -5,15 +5,28 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Middleware\TrackSiteView;
+use App\Models\SiteView;
+use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
+    // Cache counts for 60 seconds to reduce database queries
+    $stats = Cache::remember('site_stats', 60, function () {
+        return [
+            'totalViews' => SiteView::totalUniqueVisitors(),
+            'totalRegistered' => User::count(),
+        ];
+    });
+
     return Inertia::render('Welcome', [
         'canRegister' => Features::enabled(Features::registration()),
+        'stats' => $stats,
     ]);
-})->name('home');
+})->middleware(TrackSiteView::class)->name('home');
 
 // Google OAuth routes
 Route::middleware('guest')->group(function () {

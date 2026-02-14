@@ -4,6 +4,7 @@ import {
     ArrowDownRight,
     ArrowLeftRight,
     ArrowUpRight,
+    Eye,
     Github,
     LayoutGrid,
     Lock,
@@ -14,6 +15,7 @@ import {
     Tag,
     TrendingUp,
     User,
+    UserCheck,
     Wallet,
 } from 'lucide-vue-next';
 import { computed } from 'vue';
@@ -23,11 +25,23 @@ import { dashboard, login, register } from '@/routes';
 withDefaults(
     defineProps<{
         canRegister: boolean;
+        stats: {
+            totalViews: number;
+            totalRegistered: number;
+        };
     }>(),
     {
         canRegister: true,
+        stats: () => ({ totalViews: 0, totalRegistered: 0 }),
     },
 );
+
+function formatNumber(num: number): string {
+    if (num >= 1000000)
+        return (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    if (num >= 1000) return (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    return num.toLocaleString('id-ID');
+}
 
 const { resolvedAppearance, updateAppearance } = useAppearance();
 
@@ -299,6 +313,24 @@ function formatCurrency(n: number): string {
                     <img src="/logo/finsu.png" alt="Finsu" class="h-12 w-12" />
                 </div>
                 <nav class="flex items-center gap-3">
+                    <div
+                        class="hidden items-center gap-3 border-r border-gray-200 pr-3 text-xs font-medium text-gray-500 sm:flex dark:border-[#2E2E2A] dark:text-[#A1A09A]"
+                    >
+                        <span
+                            class="flex items-center gap-1"
+                            :title="`${stats.totalViews} pengunjung unik`"
+                        >
+                            <Eye class="h-3.5 w-3.5" />
+                            {{ formatNumber(stats.totalViews) }}
+                        </span>
+                        <span
+                            class="flex items-center gap-1"
+                            :title="`${stats.totalRegistered} pengguna terdaftar`"
+                        >
+                            <UserCheck class="h-3.5 w-3.5" />
+                            {{ formatNumber(stats.totalRegistered) }}
+                        </span>
+                    </div>
                     <button
                         @click="toggleTheme"
                         class="inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-700 transition hover:bg-gray-100 dark:border-[#2E2E2A] dark:text-[#EDEDEC] dark:hover:bg-[#2E2E2A]"
