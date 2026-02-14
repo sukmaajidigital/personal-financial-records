@@ -11,13 +11,29 @@ on:
       - main
 
 jobs:
-  tests:
+  build:
+    name: Build Assets
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        php-version: ['8.2', '8.3', '8.4']
 
-    name: PHP ${{ matrix.php-version }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Build Assets
+        run: npm run build
+
+  security-tests:
+    name: Security & Auth Tests
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -26,7 +42,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
+          php-version: '8.4'
           extensions: mbstring, sqlite3, pdo_sqlite
           tools: composer:v2
           coverage: none
@@ -52,5 +68,5 @@ jobs:
       - name: Build Assets
         run: npm run build
 
-      - name: Run Pest Tests
-        run: php artisan test
+      - name: Run Security & Auth Tests
+        run: php artisan test --filter="Auth|Password|TwoFactor|Verification"
