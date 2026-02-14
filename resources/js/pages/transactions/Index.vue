@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router, usePage } from '@inertiajs/vue3';
-import { ArrowDownCircle, ArrowUpCircle, ChevronLeft, ChevronRight, FolderPlus, Pencil, Plus, Search, Trash2, X } from 'lucide-vue-next';
+import { ArrowDownCircle, ArrowUpCircle, ChevronLeft, ChevronRight, Pencil, Plus, Search, Trash2, X } from 'lucide-vue-next';
 import { ref, watch } from 'vue';
 import Heading from '@/components/Heading.vue';
 import { Badge } from '@/components/ui/badge';
@@ -116,20 +116,12 @@ const hasFilters = () =>
         <div class="flex flex-col gap-6 p-4 md:p-6">
             <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <Heading title="Transaksi" description="Kelola semua transaksi keuangan Anda." />
-                <div class="flex gap-2">
-                    <Button as-child variant="outline">
-                        <Link href="/categories">
-                            <FolderPlus class="mr-2 size-4" />
-                            Tambah Kategori
-                        </Link>
-                    </Button>
-                    <Button as-child>
-                        <Link href="/transactions/create">
-                            <Plus class="mr-2 size-4" />
-                            Tambah Transaksi
-                        </Link>
-                    </Button>
-                </div>
+                <Button as-child>
+                    <Link href="/transactions/create">
+                        <Plus class="mr-2 size-4" />
+                        Tambah Transaksi
+                    </Link>
+                </Button>
             </div>
 
             <!-- Success message -->

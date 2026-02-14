@@ -28,7 +28,7 @@ class CategoryController extends Controller
     {
         $request->user()->categories()->create($request->validated());
 
-        return to_route('categories.index')
+        return back()
             ->with('success', 'Kategori berhasil ditambahkan.');
     }
 

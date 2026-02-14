@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import { ArrowLeft } from 'lucide-vue-next';
+import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { ArrowLeft, Plus } from 'lucide-vue-next';
+import { ref } from 'vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
@@ -10,6 +11,15 @@ import {
     CardFooter,
     CardHeader,
 } from '@/components/ui/card';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -45,6 +55,23 @@ const form = useForm({
 
 function submit() {
     form.put(`/transactions/${props.transaction.id}`);
+}
+
+// --- Category modal ---
+const showCategoryDialog = ref(false);
+const categoryForm = useForm({
+    name: '',
+    color: '#3b82f6',
+});
+
+function submitCategory() {
+    categoryForm.post('/categories', {
+        preserveScroll: true,
+        onSuccess: () => {
+            showCategoryDialog.value = false;
+            categoryForm.reset();
+        },
+    });
 }
 </script>
 
@@ -89,22 +116,47 @@ function submit() {
 
                             <div class="grid gap-2">
                                 <Label for="category">Kategori</Label>
-                                <Select v-model="form.category_id">
-                                    <SelectTrigger id="category">
-                                        <SelectValue
-                                            placeholder="Pilih kategori"
-                                        />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem
-                                            v-for="cat in props.categories"
-                                            :key="cat.id"
-                                            :value="String(cat.id)"
+                                <div class="flex gap-2">
+                                    <Select v-model="form.category_id">
+                                        <SelectTrigger
+                                            id="category"
+                                            class="flex-1"
                                         >
-                                            {{ cat.name }}
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                            <SelectValue
+                                                placeholder="Pilih kategori"
+                                            />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem
+                                                v-for="cat in props.categories"
+                                                :key="cat.id"
+                                                :value="String(cat.id)"
+                                            >
+                                                <span
+                                                    class="inline-flex items-center gap-2"
+                                                >
+                                                    <span
+                                                        class="size-2.5 shrink-0 rounded-full"
+                                                        :style="{
+                                                            backgroundColor:
+                                                                cat.color,
+                                                        }"
+                                                    />
+                                                    {{ cat.name }}
+                                                </span>
+                                            </SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="icon"
+                                        @click="showCategoryDialog = true"
+                                        title="Tambah Kategori Baru"
+                                    >
+                                        <Plus class="size-4" />
+                                    </Button>
+                                </div>
                                 <InputError
                                     :message="form.errors.category_id"
                                 />
@@ -161,5 +213,61 @@ function submit() {
                 </form>
             </Card>
         </div>
+
+        <!-- Create Category Dialog -->
+        <Dialog v-model:open="showCategoryDialog">
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Tambah Kategori Baru</DialogTitle>
+                    <DialogDescription>
+                        Buat kategori baru untuk mengorganisir transaksi Anda.
+                    </DialogDescription>
+                </DialogHeader>
+                <form @submit.prevent="submitCategory">
+                    <div class="space-y-4 py-4">
+                        <div class="grid gap-2">
+                            <Label for="cat-name">Nama Kategori</Label>
+                            <Input
+                                id="cat-name"
+                                v-model="categoryForm.name"
+                                placeholder="Contoh: Makanan"
+                                required
+                            />
+                            <InputError :message="categoryForm.errors.name" />
+                        </div>
+                        <div class="grid gap-2">
+                            <Label for="cat-color">Warna</Label>
+                            <div class="flex items-center gap-3">
+                                <input
+                                    id="cat-color"
+                                    v-model="categoryForm.color"
+                                    type="color"
+                                    class="h-10 w-14 cursor-pointer rounded-md border border-input bg-background p-1"
+                                />
+                                <Input
+                                    v-model="categoryForm.color"
+                                    placeholder="#3b82f6"
+                                    class="flex-1"
+                                />
+                            </div>
+                            <InputError :message="categoryForm.errors.color" />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <DialogClose as-child>
+                            <Button type="button" variant="outline"
+                                >Batal</Button
+                            >
+                        </DialogClose>
+                        <Button
+                            type="submit"
+                            :disabled="categoryForm.processing"
+                        >
+                            Simpan Kategori
+                        </Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     </AppLayout>
 </template>
