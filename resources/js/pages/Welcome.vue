@@ -1,20 +1,24 @@
 ﻿<script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
-import { dashboard, login, register } from '@/routes';
 import {
     ArrowDownRight,
     ArrowLeftRight,
     ArrowUpRight,
+    Github,
     LayoutGrid,
     Lock,
+    Moon,
     Palette,
     Shield,
+    Sun,
     Tag,
     TrendingUp,
     User,
     Wallet,
 } from 'lucide-vue-next';
+import { computed } from 'vue';
+import { useAppearance } from '@/composables/useAppearance';
+import { dashboard, login, register } from '@/routes';
 
 withDefaults(
     defineProps<{
@@ -24,6 +28,12 @@ withDefaults(
         canRegister: true,
     },
 );
+
+const { resolvedAppearance, updateAppearance } = useAppearance();
+
+function toggleTheme() {
+    updateAppearance(resolvedAppearance.value === 'dark' ? 'light' : 'dark');
+}
 
 const page = usePage();
 const baseUrl = computed(() => {
@@ -289,6 +299,30 @@ function formatCurrency(n: number): string {
                     <img src="/logo/finsu.png" alt="Finsu" class="h-12 w-12" />
                 </div>
                 <nav class="flex items-center gap-3">
+                    <button
+                        @click="toggleTheme"
+                        class="inline-flex items-center justify-center rounded-lg border border-gray-200 p-2 text-gray-700 transition hover:bg-gray-100 dark:border-[#2E2E2A] dark:text-[#EDEDEC] dark:hover:bg-[#2E2E2A]"
+                        :title="
+                            resolvedAppearance === 'dark'
+                                ? 'Beralih ke mode terang'
+                                : 'Beralih ke mode gelap'
+                        "
+                    >
+                        <Sun
+                            v-if="resolvedAppearance === 'dark'"
+                            class="h-4 w-4"
+                        />
+                        <Moon v-else class="h-4 w-4" />
+                    </button>
+                    <a
+                        href="https://github.com/sukmaajidigital/personal-financial-records"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-[#EDEDEC] dark:hover:bg-[#2E2E2A]"
+                    >
+                        <Github class="h-4 w-4" />
+                        GitHub
+                    </a>
                     <Link
                         v-if="$page.props.auth.user"
                         :href="dashboard()"
