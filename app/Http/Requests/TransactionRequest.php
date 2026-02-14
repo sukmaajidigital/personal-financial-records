@@ -27,4 +27,25 @@ class TransactionRequest extends FormRequest
             'date' => ['required', 'date'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'category_id.required' => 'Kategori wajib dipilih.',
+            'category_id.integer' => 'Kategori tidak valid.',
+            'category_id.exists' => 'Kategori yang dipilih tidak ditemukan.',
+            'description.required' => 'Deskripsi mohon diisi.',
+            'description.string' => 'Deskripsi harus berupa teks.',
+            'description.max' => 'Deskripsi maksimal 255 karakter.',
+            'amount.required' => 'Jumlah wajib diisi.',
+            'amount.numeric' => 'Jumlah harus berupa angka.',
+            'amount.min' => 'Jumlah minimal Rp 0,01.',
+            'amount.max' => 'Jumlah terlalu besar.',
+            'type.required' => 'Tipe transaksi wajib dipilih.',
+            'type.string' => 'Tipe transaksi tidak valid.',
+            'type.in' => 'Tipe transaksi harus pemasukan atau pengeluaran.',
+            'date.required' => 'Tanggal wajib diisi.',
+            'date.date' => 'Format tanggal tidak valid.',
+        ];
+    }
 }

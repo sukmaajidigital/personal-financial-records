@@ -19,4 +19,17 @@ class CategoryRequest extends FormRequest
             'color' => ['required', 'string', 'max:7', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Nama kategori wajib diisi.',
+            'name.string' => 'Nama kategori harus berupa teks.',
+            'name.max' => 'Nama kategori maksimal 255 karakter.',
+            'color.required' => 'Warna wajib diisi.',
+            'color.string' => 'Warna harus berupa teks.',
+            'color.max' => 'Kode warna maksimal 7 karakter.',
+            'color.regex' => 'Format warna harus berupa kode hex yang valid (contoh: #3b82f6).',
+        ];
+    }
 }

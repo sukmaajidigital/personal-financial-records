@@ -26,4 +26,12 @@ class ProfileDeleteRequest extends FormRequest
             'password' => $this->currentPasswordRules(),
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'password.required' => 'Kata sandi wajib diisi untuk konfirmasi.',
+            'password.current_password' => 'Kata sandi tidak sesuai.',
+        ];
+    }
 }
