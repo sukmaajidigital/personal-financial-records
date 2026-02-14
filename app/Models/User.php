@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
@@ -23,6 +24,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'google_id',
+        'avatar',
     ];
 
     /**
@@ -35,6 +38,7 @@ class User extends Authenticatable
         'two_factor_secret',
         'two_factor_recovery_codes',
         'remember_token',
+        'google_id',
     ];
 
     /**
@@ -49,6 +53,32 @@ class User extends Authenticatable
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Determine if the user registered via Google OAuth.
+     */
+    public function isGoogleUser(): bool
+    {
+        return $this->google_id !== null;
+    }
+
+    /**
+     * Disable Laravel's default email verification notification.
+     * We use our own code-based verification via EmailVerificationCodeNotification,
+     * sent explicitly in CreateNewUser. Google users are auto-verified.
+     */
+    public function sendEmailVerificationNotification(): void
+    {
+        // Do nothing — verification code is sent in CreateNewUser::create()
+    }
+
+    /**
+     * @return HasOne<EmailVerificationCode, $this>
+     */
+    public function emailVerificationCode(): HasOne
+    {
+        return $this->hasOne(EmailVerificationCode::class);
     }
 
     /**

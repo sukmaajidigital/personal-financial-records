@@ -17,6 +17,11 @@ class ProfileDeleteRequest extends FormRequest
      */
     public function rules(): array
     {
+        // Google users without a password don't need to confirm password
+        if ($this->user()->password === null) {
+            return [];
+        }
+
         return [
             'password' => $this->currentPasswordRules(),
         ];

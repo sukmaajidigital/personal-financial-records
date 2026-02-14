@@ -15,7 +15,10 @@ class PasswordController extends Controller
      */
     public function edit(): Response
     {
-        return Inertia::render('settings/Password');
+        return Inertia::render('settings/Password', [
+            'isGoogleUser' => request()->user()->isGoogleUser(),
+            'hasPassword' => request()->user()->password !== null,
+        ]);
     }
 
     /**
