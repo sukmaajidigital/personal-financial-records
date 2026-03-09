@@ -99,3 +99,34 @@ export type AnalyticsFilters = {
     category_id: string | null;
     type: string | null;
 };
+
+export type PlannedTransaction = {
+    id: number;
+    user_id: number;
+    category_id: number;
+    description: string;
+    amount: string;
+    type: 'income' | 'expense';
+    planned_date: string;
+    notes: string | null;
+    status: 'draft' | 'posted';
+    posted_at: string | null;
+    category?: Pick<Category, 'id' | 'name' | 'color'>;
+    created_at: string;
+    updated_at: string;
+};
+
+export type SuggestionFocus = 'fitur_baru' | 'pengurangan_fitur' | 'tampilan' | 'performa' | 'keamanan' | 'lainnya';
+
+export type Suggestion = {
+    id: number;
+    user_id: number;
+    title: string;
+    description: string;
+    focus: SuggestionFocus;
+    image: string | null;
+    status: 'pending' | 'reviewed' | 'accepted' | 'rejected';
+    user?: { id: number; name: string; avatar: string | null };
+    created_at: string;
+    updated_at: string;
+};

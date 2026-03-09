@@ -5,6 +5,8 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PlannedTransactionController;
+use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\TrackSiteView;
 use App\Models\SiteView;
@@ -53,6 +55,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('transactions', TransactionController::class)
         ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
+    Route::resource('planned-transactions', PlannedTransactionController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::post('planned-transactions/{planned_transaction}/post', [PlannedTransactionController::class, 'post'])
+        ->name('planned-transactions.post');
+
+    Route::resource('suggestions', SuggestionController::class)
+        ->only(['index', 'create', 'store', 'destroy']);
 });
 
 require __DIR__ . '/settings.php';

@@ -3,8 +3,10 @@ import { Link } from '@inertiajs/vue3';
 import {
     ArrowLeftRight,
     BarChart3,
+    ClipboardList,
     GitBranch,
     LayoutGrid,
+    MessageSquarePlus,
     Tag,
     Globe,
 } from 'lucide-vue-next';
@@ -36,6 +38,11 @@ const mainNavItems: NavItem[] = [
         icon: ArrowLeftRight,
     },
     {
+        title: 'Perencanaan',
+        href: '/planned-transactions',
+        icon: ClipboardList,
+    },
+    {
         title: 'Kategori',
         href: '/categories',
         icon: Tag,
@@ -44,6 +51,11 @@ const mainNavItems: NavItem[] = [
         title: 'Analitik',
         href: '/analytics',
         icon: BarChart3,
+    },
+    {
+        title: 'Saran',
+        href: '/suggestions',
+        icon: MessageSquarePlus,
     },
 ];
 
