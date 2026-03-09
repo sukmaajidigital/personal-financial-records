@@ -11,6 +11,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\TrackSiteView;
 use App\Models\SiteView;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -63,6 +64,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('suggestions', SuggestionController::class)
         ->only(['index', 'create', 'store', 'destroy']);
+
+    Route::post('dismiss-notification', function (Request $request) {
+        $request->user()->update([
+            'notification_dismissed_version' => \App\Http\Middleware\HandleInertiaRequests::NOTIFICATION_VERSION,
+        ]);
+        return back();
+    })->name('dismiss-notification');
 });
 
 require __DIR__ . '/settings.php';
