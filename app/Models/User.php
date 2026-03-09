@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'google_id',
         'avatar',
+        'notification_dismissed_version',
     ];
 
     /**
@@ -95,5 +96,21 @@ class User extends Authenticatable implements MustVerifyEmail
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
+    }
+
+    /**
+     * @return HasMany<PlannedTransaction, $this>
+     */
+    public function plannedTransactions(): HasMany
+    {
+        return $this->hasMany(PlannedTransaction::class);
+    }
+
+    /**
+     * @return HasMany<Suggestion, $this>
+     */
+    public function suggestions(): HasMany
+    {
+        return $this->hasMany(Suggestion::class);
     }
 }

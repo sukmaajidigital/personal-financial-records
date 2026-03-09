@@ -5,10 +5,13 @@ use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PlannedTransactionController;
+use App\Http\Controllers\SuggestionController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Middleware\TrackSiteView;
 use App\Models\SiteView;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -53,6 +56,21 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('transactions', TransactionController::class)
         ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+
+    Route::resource('planned-transactions', PlannedTransactionController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
+    Route::post('planned-transactions/{planned_transaction}/post', [PlannedTransactionController::class, 'post'])
+        ->name('planned-transactions.post');
+
+    Route::resource('suggestions', SuggestionController::class)
+        ->only(['index', 'create', 'store', 'destroy']);
+
+    Route::post('dismiss-notification', function (Request $request) {
+        $request->user()->update([
+            'notification_dismissed_version' => \App\Http\Middleware\HandleInertiaRequests::NOTIFICATION_VERSION,
+        ]);
+        return back();
+    })->name('dismiss-notification');
 });
 
 require __DIR__ . '/settings.php';

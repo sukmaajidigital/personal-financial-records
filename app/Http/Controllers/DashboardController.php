@@ -71,6 +71,24 @@ class DashboardController extends Controller
             ->limit(5)
             ->get();
 
+        // Planned income (draft, upcoming)
+        $plannedIncome = $user->plannedTransactions()
+            ->with('category:id,name,color')
+            ->where('type', 'income')
+            ->where('status', 'draft')
+            ->orderBy('planned_date')
+            ->limit(5)
+            ->get();
+
+        // Planned expense (draft, upcoming)
+        $plannedExpense = $user->plannedTransactions()
+            ->with('category:id,name,color')
+            ->where('type', 'expense')
+            ->where('status', 'draft')
+            ->orderBy('planned_date')
+            ->limit(5)
+            ->get();
+
         return Inertia::render('Dashboard', [
             'summary' => [
                 'totalIncome' => (float) $monthlySummary->total_income,
@@ -82,6 +100,8 @@ class DashboardController extends Controller
             'expenseByCategory' => $expenseByCategory,
             'incomeByCategory' => $incomeByCategory,
             'recentTransactions' => $recentTransactions,
+            'plannedIncome' => $plannedIncome,
+            'plannedExpense' => $plannedExpense,
         ]);
     }
 }
