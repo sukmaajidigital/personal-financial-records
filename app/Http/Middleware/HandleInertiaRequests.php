@@ -94,6 +94,17 @@ class HandleInertiaRequests extends Middleware
                             'title' => 'Pemasukan per Kategori',
                             'description' => 'Dashboard kini menampilkan breakdown pemasukan berdasarkan kategori.',
                         ],
+                        [
+                            'icon' => 'calendar-clock',
+                            'title' => 'Rencana Transaksi di Dashboard',
+                            'description' => 'Dashboard menampilkan rencana pemasukan & pengeluaran yang belum diposting.',
+                            'details' => [
+                                'Card Rencana Pemasukan dan Rencana Pengeluaran',
+                                'Klik item untuk langsung mengedit rencana',
+                                'Tombol "Lihat Semua" untuk ke halaman perencanaan',
+                                'Nominal bisa di-show/hide untuk privasi',
+                            ],
+                        ],
                     ],
                 ]
                 : null,

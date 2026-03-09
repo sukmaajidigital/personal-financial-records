@@ -3,12 +3,14 @@ import { Head, Link } from '@inertiajs/vue3';
 import {
     ArrowDownCircle,
     ArrowUpCircle,
+    CalendarClock,
     DollarSign,
     Eye,
     EyeOff,
     FolderOpen,
     Plus,
     Receipt,
+    Send,
     TrendingUp,
     Wallet,
 } from 'lucide-vue-next';
@@ -37,6 +39,7 @@ import type {
     ExpenseByCategory,
     IncomeByCategory,
     MonthlyTrend,
+    PlannedTransaction,
     Transaction,
 } from '@/types';
 
@@ -46,6 +49,8 @@ type Props = {
     expenseByCategory: ExpenseByCategory[];
     incomeByCategory: IncomeByCategory[];
     recentTransactions: Transaction[];
+    plannedIncome: PlannedTransaction[];
+    plannedExpense: PlannedTransaction[];
 };
 
 const props = defineProps<Props>();
@@ -83,6 +88,8 @@ const showTrend = ref(false);
 const showCategory = ref(false);
 const showIncomeCategory = ref(false);
 const showTransactions = ref(false);
+const showPlannedIncome = ref(false);
+const showPlannedExpense = ref(false);
 
 const masked = 'Rp ••••••••';
 const maskedShort = '••••••';
@@ -490,6 +497,129 @@ const totalIncomeCategory = computed(() => {
                     </div>
                 </CardContent>
             </Card>
+
+            <!-- Rencana Transaksi -->
+            <div class="grid gap-4 lg:grid-cols-2">
+                <!-- Rencana Pemasukan -->
+                <Card>
+                    <CardHeader class="flex flex-row items-start justify-between">
+                        <div class="space-y-1">
+                            <CardTitle class="flex items-center gap-2">
+                                <CalendarClock class="size-4 text-green-500" />
+                                Rencana Pemasukan
+                            </CardTitle>
+                            <CardDescription>Rencana pemasukan yang belum diposting</CardDescription>
+                        </div>
+                        <button
+                            class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            @click="showPlannedIncome = !showPlannedIncome"
+                        >
+                            <Eye v-if="showPlannedIncome" class="size-4" />
+                            <EyeOff v-else class="size-4" />
+                        </button>
+                    </CardHeader>
+                    <CardContent>
+                        <div
+                            v-if="props.plannedIncome.length === 0"
+                            class="flex h-32 items-center justify-center text-sm text-muted-foreground"
+                        >
+                            Belum ada rencana pemasukan.
+                        </div>
+                        <div v-else class="space-y-3">
+                            <Link
+                                v-for="item in props.plannedIncome"
+                                :key="item.id"
+                                :href="`/planned-transactions/${item.id}/edit`"
+                                class="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                            >
+                                <div class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-green-100 dark:bg-green-950">
+                                    <CalendarClock class="size-4 text-green-600" />
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium truncate">{{ item.description }}</p>
+                                    <div class="flex items-center gap-2 mt-0.5">
+                                        <div v-if="item.category" class="flex items-center gap-1">
+                                            <span class="size-2 rounded-full" :style="{ backgroundColor: item.category.color }" />
+                                            <span class="text-xs text-muted-foreground">{{ item.category.name }}</span>
+                                        </div>
+                                        <span class="text-xs text-muted-foreground">{{ formatDate(item.planned_date) }}</span>
+                                    </div>
+                                    <p v-if="item.notes" class="text-xs text-muted-foreground/70 mt-0.5 truncate">{{ item.notes }}</p>
+                                </div>
+                                <span
+                                    class="shrink-0 text-sm font-bold transition-all"
+                                    :class="showPlannedIncome ? 'text-green-600' : 'text-muted-foreground select-none'"
+                                >
+                                    {{ showPlannedIncome ? '+' + formatCurrency(Number(item.amount)) : maskedShort }}
+                                </span>
+                            </Link>
+                            <Button variant="outline" size="sm" as-child class="w-full">
+                                <Link href="/planned-transactions?type=income">Lihat Semua Rencana Pemasukan</Link>
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <!-- Rencana Pengeluaran -->
+                <Card>
+                    <CardHeader class="flex flex-row items-start justify-between">
+                        <div class="space-y-1">
+                            <CardTitle class="flex items-center gap-2">
+                                <CalendarClock class="size-4 text-red-500" />
+                                Rencana Pengeluaran
+                            </CardTitle>
+                            <CardDescription>Rencana pengeluaran yang belum diposting</CardDescription>
+                        </div>
+                        <button
+                            class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                            @click="showPlannedExpense = !showPlannedExpense"
+                        >
+                            <Eye v-if="showPlannedExpense" class="size-4" />
+                            <EyeOff v-else class="size-4" />
+                        </button>
+                    </CardHeader>
+                    <CardContent>
+                        <div
+                            v-if="props.plannedExpense.length === 0"
+                            class="flex h-32 items-center justify-center text-sm text-muted-foreground"
+                        >
+                            Belum ada rencana pengeluaran.
+                        </div>
+                        <div v-else class="space-y-3">
+                            <Link
+                                v-for="item in props.plannedExpense"
+                                :key="item.id"
+                                :href="`/planned-transactions/${item.id}/edit`"
+                                class="flex items-center gap-3 rounded-lg border p-3 transition-colors hover:bg-muted/50"
+                            >
+                                <div class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-red-100 dark:bg-red-950">
+                                    <CalendarClock class="size-4 text-red-600" />
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium truncate">{{ item.description }}</p>
+                                    <div class="flex items-center gap-2 mt-0.5">
+                                        <div v-if="item.category" class="flex items-center gap-1">
+                                            <span class="size-2 rounded-full" :style="{ backgroundColor: item.category.color }" />
+                                            <span class="text-xs text-muted-foreground">{{ item.category.name }}</span>
+                                        </div>
+                                        <span class="text-xs text-muted-foreground">{{ formatDate(item.planned_date) }}</span>
+                                    </div>
+                                    <p v-if="item.notes" class="text-xs text-muted-foreground/70 mt-0.5 truncate">{{ item.notes }}</p>
+                                </div>
+                                <span
+                                    class="shrink-0 text-sm font-bold transition-all"
+                                    :class="showPlannedExpense ? 'text-red-600' : 'text-muted-foreground select-none'"
+                                >
+                                    {{ showPlannedExpense ? '-' + formatCurrency(Number(item.amount)) : maskedShort }}
+                                </span>
+                            </Link>
+                            <Button variant="outline" size="sm" as-child class="w-full">
+                                <Link href="/planned-transactions?type=expense">Lihat Semua Rencana Pengeluaran</Link>
+                            </Button>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
 
             <!-- Recent Transactions -->
             <Card>
