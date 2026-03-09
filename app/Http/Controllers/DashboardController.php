@@ -53,6 +53,16 @@ class DashboardController extends Controller
             ->orderByDesc('total')
             ->get();
 
+        // Income by category (current month)
+        $incomeByCategory = $user->transactions()
+            ->where('type', 'income')
+            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$currentMonth])
+            ->join('categories', 'transactions.category_id', '=', 'categories.id')
+            ->selectRaw('categories.name, categories.color, SUM(transactions.amount) as total')
+            ->groupBy('categories.id', 'categories.name', 'categories.color')
+            ->orderByDesc('total')
+            ->get();
+
         // Recent transactions (latest 5)
         $recentTransactions = $user->transactions()
             ->with('category:id,name,color')
@@ -70,6 +80,7 @@ class DashboardController extends Controller
             ],
             'monthlyTrend' => $monthlyTrend,
             'expenseByCategory' => $expenseByCategory,
+            'incomeByCategory' => $incomeByCategory,
             'recentTransactions' => $recentTransactions,
         ]);
     }

@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import {
     ArrowLeftRight,
+    BarChart3,
     GitBranch,
     LayoutGrid,
     Tag,
@@ -38,6 +39,11 @@ const mainNavItems: NavItem[] = [
         title: 'Kategori',
         href: '/categories',
         icon: Tag,
+    },
+    {
+        title: 'Analitik',
+        href: '/analytics',
+        icon: BarChart3,
     },
 ];
 

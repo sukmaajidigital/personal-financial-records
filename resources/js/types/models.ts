@@ -54,10 +54,48 @@ export type ExpenseByCategory = {
     total: number;
 };
 
+export type IncomeByCategory = {
+    name: string;
+    color: string;
+    total: number;
+};
+
 export type TransactionFilters = {
     search?: string;
     type?: string;
     category_id?: string;
     date_from?: string;
     date_to?: string;
+};
+
+export type AnalyticsSummary = {
+    totalIncome: number;
+    totalExpense: number;
+    balance: number;
+    totalTransactions: number;
+    avgExpense: number;
+    highestExpense: Transaction | null;
+    highestIncome: Transaction | null;
+};
+
+export type DailyTrend = {
+    day: string;
+    income: number;
+    expense: number;
+};
+
+export type CategoryBreakdown = {
+    name: string;
+    color: string;
+    total: number;
+    count: number;
+};
+
+export type AnalyticsFilters = {
+    date_from: string | null;
+    date_to: string | null;
+    month: string | null;
+    year: string | number | null;
+    category_id: string | null;
+    type: string | null;
 };

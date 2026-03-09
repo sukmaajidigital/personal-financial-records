@@ -35,6 +35,7 @@ import type {
     BreadcrumbItem,
     DashboardSummary,
     ExpenseByCategory,
+    IncomeByCategory,
     MonthlyTrend,
     Transaction,
 } from '@/types';
@@ -43,6 +44,7 @@ type Props = {
     summary: DashboardSummary;
     monthlyTrend: MonthlyTrend[];
     expenseByCategory: ExpenseByCategory[];
+    incomeByCategory: IncomeByCategory[];
     recentTransactions: Transaction[];
 };
 
@@ -79,6 +81,7 @@ const showIncome = ref(false);
 const showExpense = ref(false);
 const showTrend = ref(false);
 const showCategory = ref(false);
+const showIncomeCategory = ref(false);
 const showTransactions = ref(false);
 
 const masked = 'Rp ••••••••';
@@ -96,6 +99,10 @@ const maxTrendValue = computed(() => {
 
 const totalExpenseCategory = computed(() => {
     return props.expenseByCategory.reduce((sum, c) => sum + Number(c.total), 0);
+});
+
+const totalIncomeCategory = computed(() => {
+    return props.incomeByCategory.reduce((sum, c) => sum + Number(c.total), 0);
 });
 </script>
 
@@ -414,6 +421,75 @@ const totalExpenseCategory = computed(() => {
                     </CardContent>
                 </Card>
             </div>
+
+            <!-- Income by Category -->
+            <Card>
+                <CardHeader
+                    class="flex flex-row items-start justify-between"
+                >
+                    <div class="space-y-1">
+                        <CardTitle>Pemasukan per Kategori</CardTitle>
+                        <CardDescription>Bulan ini</CardDescription>
+                    </div>
+                    <button
+                        class="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                        @click="showIncomeCategory = !showIncomeCategory"
+                    >
+                        <Eye v-if="showIncomeCategory" class="size-4" />
+                        <EyeOff v-else class="size-4" />
+                    </button>
+                </CardHeader>
+                <CardContent>
+                    <div
+                        v-if="props.incomeByCategory.length === 0"
+                        class="flex h-32 items-center justify-center text-sm text-muted-foreground"
+                    >
+                        Belum ada pemasukan bulan ini.
+                    </div>
+                    <div v-else class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div
+                            v-for="category in props.incomeByCategory"
+                            :key="category.name"
+                            class="rounded-lg border p-4 transition-colors hover:bg-muted/50"
+                        >
+                            <div class="flex items-center gap-2 mb-2">
+                                <span
+                                    class="size-3 rounded-full"
+                                    :style="{
+                                        backgroundColor: category.color,
+                                    }"
+                                />
+                                <span class="text-sm font-medium">{{ category.name }}</span>
+                            </div>
+                            <div
+                                class="text-lg font-bold transition-all"
+                                :class="
+                                    showIncomeCategory
+                                        ? 'text-green-600'
+                                        : 'text-muted-foreground select-none'
+                                "
+                            >
+                                {{
+                                    showIncomeCategory
+                                        ? formatCurrency(Number(category.total))
+                                        : maskedShort
+                                }}
+                            </div>
+                            <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
+                                <div
+                                    class="h-full rounded-full bg-green-500 transition-all"
+                                    :style="{
+                                        width: `${(Number(category.total) / totalIncomeCategory) * 100}%`,
+                                    }"
+                                />
+                            </div>
+                            <p class="mt-1 text-xs text-muted-foreground">
+                                {{ totalIncomeCategory > 0 ? ((Number(category.total) / totalIncomeCategory) * 100).toFixed(1) : 0 }}% dari total pemasukan
+                            </p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
 
             <!-- Recent Transactions -->
             <Card>
