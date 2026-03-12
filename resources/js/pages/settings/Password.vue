@@ -54,7 +54,7 @@ const breadcrumbItems: BreadcrumbItem[] = [
                         'current_password',
                     ]"
                     class="space-y-6"
-                    v-slot="{ errors, processing, recentlySuccessful }"
+                    v-slot="{ errors, processing }"
                 >
                     <div v-if="hasPassword" class="grid gap-2">
                         <Label for="current_password">Current password</Label>

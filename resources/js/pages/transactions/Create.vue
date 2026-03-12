@@ -5,11 +5,7 @@ import { ref } from 'vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardFooter,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
     Dialog,
     DialogClose,

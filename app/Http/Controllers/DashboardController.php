@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,10 +13,11 @@ class DashboardController extends Controller
         $user = $request->user();
 
         // Summary totals for current month
-        $currentMonth = now()->format('Y-m');
+        $now = now();
 
         $monthlySummary = $user->transactions()
-            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$currentMonth])
+            ->whereYear('date', $now->year)
+            ->whereMonth('date', $now->month)
             ->selectRaw("
                 COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) as total_income,
                 COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) as total_expense,
@@ -34,19 +34,23 @@ class DashboardController extends Controller
         // Monthly trend (last 6 months)
         $monthlyTrend = $user->transactions()
             ->whereDate('date', '>=', now()->subMonths(5)->startOfMonth())
-            ->selectRaw("
-                DATE_FORMAT(date, '%Y-%m') as month,
-                COALESCE(SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END), 0) as income,
-                COALESCE(SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END), 0) as expense
-            ")
-            ->groupBy('month')
-            ->orderBy('month')
             ->get();
+
+        $monthlyTrend = $monthlyTrend
+            ->groupBy(fn($transaction) => $transaction->date->format('Y-m'))
+            ->map(fn($transactions, $month) => [
+                'month' => $month,
+                'income' => (float) $transactions->where('type', 'income')->sum('amount'),
+                'expense' => (float) $transactions->where('type', 'expense')->sum('amount'),
+            ])
+            ->sortBy('month')
+            ->values();
 
         // Expense by category (current month)
         $expenseByCategory = $user->transactions()
             ->where('type', 'expense')
-            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$currentMonth])
+            ->whereYear('date', $now->year)
+            ->whereMonth('date', $now->month)
             ->join('categories', 'transactions.category_id', '=', 'categories.id')
             ->selectRaw('categories.name, categories.color, SUM(transactions.amount) as total')
             ->groupBy('categories.id', 'categories.name', 'categories.color')
@@ -56,7 +60,8 @@ class DashboardController extends Controller
         // Income by category (current month)
         $incomeByCategory = $user->transactions()
             ->where('type', 'income')
-            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$currentMonth])
+            ->whereYear('date', $now->year)
+            ->whereMonth('date', $now->month)
             ->join('categories', 'transactions.category_id', '=', 'categories.id')
             ->selectRaw('categories.name, categories.color, SUM(transactions.amount) as total')
             ->groupBy('categories.id', 'categories.name', 'categories.color')

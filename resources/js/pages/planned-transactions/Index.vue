@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, router, useForm } from '@inertiajs/vue3';
 import {
-    ArrowLeft,
     Check,
     ClipboardList,
     Edit,
@@ -15,11 +14,7 @@ import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardHeader,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
     Dialog,
     DialogClose,
@@ -150,7 +145,9 @@ function formatDate(date: string): string {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-col gap-6 p-4 md:p-6">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div
+                class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+            >
                 <Heading
                     title="Perencanaan Transaksi"
                     description="Kelola rencana transaksi pemasukan dan pengeluaran."
@@ -168,24 +165,40 @@ function formatDate(date: string): string {
                 <CardContent class="pt-6">
                     <div class="grid gap-3 sm:grid-cols-3">
                         <div>
-                            <label class="mb-1.5 block text-xs font-medium text-muted-foreground">Status</label>
+                            <label
+                                class="mb-1.5 block text-xs font-medium text-muted-foreground"
+                                >Status</label
+                            >
                             <Select v-model="statusFilter">
-                                <SelectTrigger><SelectValue placeholder="Semua status" /></SelectTrigger>
+                                <SelectTrigger
+                                    ><SelectValue placeholder="Semua status"
+                                /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="">Semua</SelectItem>
                                     <SelectItem value="draft">Draft</SelectItem>
-                                    <SelectItem value="posted">Posted</SelectItem>
+                                    <SelectItem value="posted"
+                                        >Posted</SelectItem
+                                    >
                                 </SelectContent>
                             </Select>
                         </div>
                         <div>
-                            <label class="mb-1.5 block text-xs font-medium text-muted-foreground">Tipe</label>
+                            <label
+                                class="mb-1.5 block text-xs font-medium text-muted-foreground"
+                                >Tipe</label
+                            >
                             <Select v-model="typeFilter">
-                                <SelectTrigger><SelectValue placeholder="Semua tipe" /></SelectTrigger>
+                                <SelectTrigger
+                                    ><SelectValue placeholder="Semua tipe"
+                                /></SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="">Semua</SelectItem>
-                                    <SelectItem value="income">Pemasukan</SelectItem>
-                                    <SelectItem value="expense">Pengeluaran</SelectItem>
+                                    <SelectItem value="income"
+                                        >Pemasukan</SelectItem
+                                    >
+                                    <SelectItem value="expense"
+                                        >Pengeluaran</SelectItem
+                                    >
                                 </SelectContent>
                             </Select>
                         </div>
@@ -194,7 +207,9 @@ function formatDate(date: string): string {
                                 <Filter class="mr-1.5 size-3.5" />
                                 Terapkan
                             </Button>
-                            <Button variant="outline" @click="resetFilters">Reset</Button>
+                            <Button variant="outline" @click="resetFilters"
+                                >Reset</Button
+                            >
                         </div>
                     </div>
                 </CardContent>
@@ -203,9 +218,14 @@ function formatDate(date: string): string {
             <!-- Table -->
             <Card>
                 <CardContent class="p-0">
-                    <div v-if="props.plannedTransactions.data.length === 0" class="flex h-48 items-center justify-center text-sm text-muted-foreground">
+                    <div
+                        v-if="props.plannedTransactions.data.length === 0"
+                        class="flex h-48 items-center justify-center text-sm text-muted-foreground"
+                    >
                         <div class="text-center">
-                            <ClipboardList class="mx-auto mb-2 size-10 text-muted-foreground/50" />
+                            <ClipboardList
+                                class="mx-auto mb-2 size-10 text-muted-foreground/50"
+                            />
                             <p>Belum ada rencana transaksi.</p>
                         </div>
                     </div>
@@ -213,18 +233,47 @@ function formatDate(date: string): string {
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b bg-muted/50">
-                                    <th class="px-4 py-3 text-left font-medium text-muted-foreground">Tanggal</th>
-                                    <th class="px-4 py-3 text-left font-medium text-muted-foreground">Deskripsi</th>
-                                    <th class="px-4 py-3 text-left font-medium text-muted-foreground">Kategori</th>
-                                    <th class="px-4 py-3 text-left font-medium text-muted-foreground">Tipe</th>
-                                    <th class="px-4 py-3 text-right font-medium text-muted-foreground">Jumlah</th>
-                                    <th class="px-4 py-3 text-center font-medium text-muted-foreground">Status</th>
-                                    <th class="px-4 py-3 text-center font-medium text-muted-foreground">Aksi</th>
+                                    <th
+                                        class="px-4 py-3 text-left font-medium text-muted-foreground"
+                                    >
+                                        Tanggal
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left font-medium text-muted-foreground"
+                                    >
+                                        Deskripsi
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left font-medium text-muted-foreground"
+                                    >
+                                        Kategori
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-left font-medium text-muted-foreground"
+                                    >
+                                        Tipe
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-right font-medium text-muted-foreground"
+                                    >
+                                        Jumlah
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-center font-medium text-muted-foreground"
+                                    >
+                                        Status
+                                    </th>
+                                    <th
+                                        class="px-4 py-3 text-center font-medium text-muted-foreground"
+                                    >
+                                        Aksi
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr
-                                    v-for="item in props.plannedTransactions.data"
+                                    v-for="item in props.plannedTransactions
+                                        .data"
                                     :key="item.id"
                                     class="border-b transition-colors hover:bg-muted/30"
                                 >
@@ -233,50 +282,124 @@ function formatDate(date: string): string {
                                     </td>
                                     <td class="px-4 py-3">
                                         <div>
-                                            <p class="font-medium">{{ item.description }}</p>
-                                            <p v-if="item.notes" class="text-xs text-muted-foreground mt-0.5">{{ item.notes }}</p>
+                                            <p class="font-medium">
+                                                {{ item.description }}
+                                            </p>
+                                            <p
+                                                v-if="item.notes"
+                                                class="mt-0.5 text-xs text-muted-foreground"
+                                            >
+                                                {{ item.notes }}
+                                            </p>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3">
-                                        <div v-if="item.category" class="flex items-center gap-2">
-                                            <span class="size-2.5 rounded-full" :style="{ backgroundColor: item.category.color }" />
-                                            <span>{{ item.category.name }}</span>
+                                        <div
+                                            v-if="item.category"
+                                            class="flex items-center gap-2"
+                                        >
+                                            <span
+                                                class="size-2.5 rounded-full"
+                                                :style="{
+                                                    backgroundColor:
+                                                        item.category.color,
+                                                }"
+                                            />
+                                            <span>{{
+                                                item.category.name
+                                            }}</span>
                                         </div>
                                     </td>
                                     <td class="px-4 py-3">
-                                        <Badge :variant="item.type === 'income' ? 'default' : 'destructive'" class="text-xs">
-                                            {{ item.type === 'income' ? 'Pemasukan' : 'Pengeluaran' }}
+                                        <Badge
+                                            :variant="
+                                                item.type === 'income'
+                                                    ? 'default'
+                                                    : 'destructive'
+                                            "
+                                            class="text-xs"
+                                        >
+                                            {{
+                                                item.type === 'income'
+                                                    ? 'Pemasukan'
+                                                    : 'Pengeluaran'
+                                            }}
                                         </Badge>
                                     </td>
-                                    <td class="px-4 py-3 text-right font-medium" :class="item.type === 'income' ? 'text-green-600' : 'text-red-600'">
-                                        {{ item.type === 'income' ? '+' : '-' }}{{ formatCurrency(item.amount) }}
+                                    <td
+                                        class="px-4 py-3 text-right font-medium"
+                                        :class="
+                                            item.type === 'income'
+                                                ? 'text-green-600'
+                                                : 'text-red-600'
+                                        "
+                                    >
+                                        {{ item.type === 'income' ? '+' : '-'
+                                        }}{{ formatCurrency(item.amount) }}
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        <Badge v-if="item.status === 'draft'" variant="outline" class="text-xs">
+                                        <Badge
+                                            v-if="item.status === 'draft'"
+                                            variant="outline"
+                                            class="text-xs"
+                                        >
                                             Draft
                                         </Badge>
-                                        <Badge v-else class="bg-green-100 text-green-700 text-xs dark:bg-green-950 dark:text-green-400">
+                                        <Badge
+                                            v-else
+                                            class="bg-green-100 text-xs text-green-700 dark:bg-green-950 dark:text-green-400"
+                                        >
                                             <Check class="mr-1 size-3" />
                                             Posted
                                         </Badge>
                                     </td>
                                     <td class="px-4 py-3">
-                                        <div class="flex items-center justify-center gap-1">
-                                            <template v-if="item.status === 'draft'">
-                                                <Button size="sm" variant="default" @click="openPostModal(item)" title="Post ke transaksi">
+                                        <div
+                                            class="flex items-center justify-center gap-1"
+                                        >
+                                            <template
+                                                v-if="item.status === 'draft'"
+                                            >
+                                                <Button
+                                                    size="sm"
+                                                    variant="default"
+                                                    @click="openPostModal(item)"
+                                                    title="Post ke transaksi"
+                                                >
                                                     <Send class="size-3.5" />
                                                 </Button>
-                                                <Button size="sm" variant="outline" as-child>
-                                                    <Link :href="`/planned-transactions/${item.id}/edit`">
-                                                        <Edit class="size-3.5" />
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    as-child
+                                                >
+                                                    <Link
+                                                        :href="`/planned-transactions/${item.id}/edit`"
+                                                    >
+                                                        <Edit
+                                                            class="size-3.5"
+                                                        />
                                                     </Link>
                                                 </Button>
-                                                <Button size="sm" variant="destructive" @click="confirmDelete(item)">
+                                                <Button
+                                                    size="sm"
+                                                    variant="destructive"
+                                                    @click="confirmDelete(item)"
+                                                >
                                                     <Trash2 class="size-3.5" />
                                                 </Button>
                                             </template>
-                                            <span v-else class="text-xs text-muted-foreground">
-                                                {{ item.posted_at ? formatDate(item.posted_at) : '' }}
+                                            <span
+                                                v-else
+                                                class="text-xs text-muted-foreground"
+                                            >
+                                                {{
+                                                    item.posted_at
+                                                        ? formatDate(
+                                                              item.posted_at,
+                                                          )
+                                                        : ''
+                                                }}
                                             </span>
                                         </div>
                                     </td>
@@ -286,21 +409,41 @@ function formatDate(date: string): string {
                     </div>
 
                     <!-- Pagination -->
-                    <div v-if="props.plannedTransactions.last_page > 1" class="flex items-center justify-between border-t px-4 py-3">
+                    <div
+                        v-if="props.plannedTransactions.last_page > 1"
+                        class="flex items-center justify-between border-t px-4 py-3"
+                    >
                         <p class="text-sm text-muted-foreground">
-                            {{ props.plannedTransactions.from }}-{{ props.plannedTransactions.to }} dari {{ props.plannedTransactions.total }}
+                            {{ props.plannedTransactions.from }}-{{
+                                props.plannedTransactions.to
+                            }}
+                            dari {{ props.plannedTransactions.total }}
                         </p>
                         <div class="flex gap-1">
-                            <template v-for="link in props.plannedTransactions.links" :key="link.label">
+                            <template
+                                v-for="link in props.plannedTransactions.links"
+                                :key="link.label"
+                            >
                                 <Button
                                     v-if="link.url"
                                     size="sm"
-                                    :variant="link.active ? 'default' : 'outline'"
+                                    :variant="
+                                        link.active ? 'default' : 'outline'
+                                    "
                                     as-child
                                 >
-                                    <Link :href="link.url" v-html="link.label" />
+                                    <Link :href="link.url">{{
+                                        link.label
+                                    }}</Link>
                                 </Button>
-                                <Button v-else size="sm" variant="outline" disabled v-html="link.label" />
+                                <Button
+                                    v-else
+                                    size="sm"
+                                    variant="outline"
+                                    disabled
+                                >
+                                    {{ link.label }}
+                                </Button>
                             </template>
                         </div>
                     </div>
@@ -314,15 +457,18 @@ function formatDate(date: string): string {
                 <DialogHeader>
                     <DialogTitle>Hapus Rencana Transaksi</DialogTitle>
                     <DialogDescription>
-                        Apakah Anda yakin ingin menghapus rencana "{{ deleteTarget?.description }}"?
-                        Tindakan ini tidak dapat dibatalkan.
+                        Apakah Anda yakin ingin menghapus rencana "{{
+                            deleteTarget?.description
+                        }}"? Tindakan ini tidak dapat dibatalkan.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose as-child>
                         <Button variant="outline">Batal</Button>
                     </DialogClose>
-                    <Button variant="destructive" @click="executeDelete">Hapus</Button>
+                    <Button variant="destructive" @click="executeDelete"
+                        >Hapus</Button
+                    >
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -333,8 +479,8 @@ function formatDate(date: string): string {
                 <DialogHeader>
                     <DialogTitle>Review & Post Transaksi</DialogTitle>
                     <DialogDescription>
-                        Tinjau dan sesuaikan data sebelum memposting ke transaksi.
-                        Anda dapat mengubah data jika diperlukan.
+                        Tinjau dan sesuaikan data sebelum memposting ke
+                        transaksi. Anda dapat mengubah data jika diperlukan.
                     </DialogDescription>
                 </DialogHeader>
                 <form @submit.prevent="submitPost">
@@ -347,8 +493,12 @@ function formatDate(date: string): string {
                                         <SelectValue placeholder="Pilih tipe" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="income">Pemasukan</SelectItem>
-                                        <SelectItem value="expense">Pengeluaran</SelectItem>
+                                        <SelectItem value="income"
+                                            >Pemasukan</SelectItem
+                                        >
+                                        <SelectItem value="expense"
+                                            >Pengeluaran</SelectItem
+                                        >
                                     </SelectContent>
                                 </Select>
                                 <InputError :message="postForm.errors.type" />
@@ -357,43 +507,79 @@ function formatDate(date: string): string {
                                 <Label for="post-category">Kategori</Label>
                                 <Select v-model="postForm.category_id">
                                     <SelectTrigger id="post-category">
-                                        <SelectValue placeholder="Pilih kategori" />
+                                        <SelectValue
+                                            placeholder="Pilih kategori"
+                                        />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem v-for="cat in props.categories" :key="cat.id" :value="String(cat.id)">
-                                            <span class="inline-flex items-center gap-2">
-                                                <span class="size-2.5 shrink-0 rounded-full" :style="{ backgroundColor: cat.color }" />
+                                        <SelectItem
+                                            v-for="cat in props.categories"
+                                            :key="cat.id"
+                                            :value="String(cat.id)"
+                                        >
+                                            <span
+                                                class="inline-flex items-center gap-2"
+                                            >
+                                                <span
+                                                    class="size-2.5 shrink-0 rounded-full"
+                                                    :style="{
+                                                        backgroundColor:
+                                                            cat.color,
+                                                    }"
+                                                />
                                                 {{ cat.name }}
                                             </span>
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
-                                <InputError :message="postForm.errors.category_id" />
+                                <InputError
+                                    :message="postForm.errors.category_id"
+                                />
                             </div>
                         </div>
 
                         <div class="grid gap-2">
                             <Label for="post-description">Deskripsi</Label>
-                            <Input id="post-description" v-model="postForm.description" required />
-                            <InputError :message="postForm.errors.description" />
+                            <Input
+                                id="post-description"
+                                v-model="postForm.description"
+                                required
+                            />
+                            <InputError
+                                :message="postForm.errors.description"
+                            />
                         </div>
 
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div class="grid gap-2">
                                 <Label for="post-amount">Jumlah (Rp)</Label>
-                                <Input id="post-amount" v-model="postForm.amount" type="number" min="0.01" step="0.01" required />
+                                <Input
+                                    id="post-amount"
+                                    v-model="postForm.amount"
+                                    type="number"
+                                    min="0.01"
+                                    step="0.01"
+                                    required
+                                />
                                 <InputError :message="postForm.errors.amount" />
                             </div>
                             <div class="grid gap-2">
                                 <Label for="post-date">Tanggal Transaksi</Label>
-                                <Input id="post-date" v-model="postForm.date" type="date" required />
+                                <Input
+                                    id="post-date"
+                                    v-model="postForm.date"
+                                    type="date"
+                                    required
+                                />
                                 <InputError :message="postForm.errors.date" />
                             </div>
                         </div>
                     </div>
                     <DialogFooter>
                         <DialogClose as-child>
-                            <Button type="button" variant="outline">Batal</Button>
+                            <Button type="button" variant="outline"
+                                >Batal</Button
+                            >
                         </DialogClose>
                         <Button type="submit" :disabled="postForm.processing">
                             <Send class="mr-1.5 size-3.5" />

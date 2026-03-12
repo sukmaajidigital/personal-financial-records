@@ -5,11 +5,7 @@ import { ref } from 'vue';
 import Heading from '@/components/Heading.vue';
 import InputError from '@/components/InputError.vue';
 import { Button } from '@/components/ui/button';
-import {
-    Card,
-    CardContent,
-    CardFooter,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import {
     Dialog,
     DialogClose,
@@ -104,8 +100,12 @@ function submitCategory() {
                                         <SelectValue placeholder="Pilih tipe" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="income">Pemasukan</SelectItem>
-                                        <SelectItem value="expense">Pengeluaran</SelectItem>
+                                        <SelectItem value="income"
+                                            >Pemasukan</SelectItem
+                                        >
+                                        <SelectItem value="expense"
+                                            >Pengeluaran</SelectItem
+                                        >
                                     </SelectContent>
                                 </Select>
                                 <InputError :message="form.errors.type" />
@@ -115,48 +115,100 @@ function submitCategory() {
                                 <Label for="category">Kategori</Label>
                                 <div class="flex gap-2">
                                     <Select v-model="form.category_id">
-                                        <SelectTrigger id="category" class="flex-1">
-                                            <SelectValue placeholder="Pilih kategori" />
+                                        <SelectTrigger
+                                            id="category"
+                                            class="flex-1"
+                                        >
+                                            <SelectValue
+                                                placeholder="Pilih kategori"
+                                            />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem v-for="cat in props.categories" :key="cat.id" :value="String(cat.id)">
-                                                <span class="inline-flex items-center gap-2">
-                                                    <span class="size-2.5 shrink-0 rounded-full" :style="{ backgroundColor: cat.color }" />
+                                            <SelectItem
+                                                v-for="cat in props.categories"
+                                                :key="cat.id"
+                                                :value="String(cat.id)"
+                                            >
+                                                <span
+                                                    class="inline-flex items-center gap-2"
+                                                >
+                                                    <span
+                                                        class="size-2.5 shrink-0 rounded-full"
+                                                        :style="{
+                                                            backgroundColor:
+                                                                cat.color,
+                                                        }"
+                                                    />
                                                     {{ cat.name }}
                                                 </span>
                                             </SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <Button type="button" variant="outline" size="icon" @click="showCategoryDialog = true" title="Tambah Kategori Baru">
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        size="icon"
+                                        @click="showCategoryDialog = true"
+                                        title="Tambah Kategori Baru"
+                                    >
                                         <Plus class="size-4" />
                                     </Button>
                                 </div>
-                                <InputError :message="form.errors.category_id" />
+                                <InputError
+                                    :message="form.errors.category_id"
+                                />
                             </div>
                         </div>
 
                         <div class="grid gap-2">
                             <Label for="description">Deskripsi</Label>
-                            <Input id="description" v-model="form.description" placeholder="Contoh: Bayar listrik bulan depan" required />
+                            <Input
+                                id="description"
+                                v-model="form.description"
+                                placeholder="Contoh: Bayar listrik bulan depan"
+                                required
+                            />
                             <InputError :message="form.errors.description" />
                         </div>
 
                         <div class="grid gap-4 sm:grid-cols-2">
                             <div class="grid gap-2">
                                 <Label for="amount">Jumlah (Rp)</Label>
-                                <Input id="amount" v-model="form.amount" type="number" min="0.01" step="0.01" placeholder="0" required />
+                                <Input
+                                    id="amount"
+                                    v-model="form.amount"
+                                    type="number"
+                                    min="0.01"
+                                    step="0.01"
+                                    placeholder="0"
+                                    required
+                                />
                                 <InputError :message="form.errors.amount" />
                             </div>
                             <div class="grid gap-2">
-                                <Label for="planned_date">Tanggal Rencana</Label>
-                                <Input id="planned_date" v-model="form.planned_date" type="date" required />
-                                <InputError :message="form.errors.planned_date" />
+                                <Label for="planned_date"
+                                    >Tanggal Rencana</Label
+                                >
+                                <Input
+                                    id="planned_date"
+                                    v-model="form.planned_date"
+                                    type="date"
+                                    required
+                                />
+                                <InputError
+                                    :message="form.errors.planned_date"
+                                />
                             </div>
                         </div>
 
                         <div class="grid gap-2">
                             <Label for="notes">Catatan (Opsional)</Label>
-                            <Textarea id="notes" v-model="form.notes" placeholder="Tambahkan catatan untuk rencana ini..." rows="3" />
+                            <Textarea
+                                id="notes"
+                                v-model="form.notes"
+                                placeholder="Tambahkan catatan untuk rencana ini..."
+                                rows="3"
+                            />
                             <InputError :message="form.errors.notes" />
                         </div>
                     </CardContent>
@@ -165,7 +217,9 @@ function submitCategory() {
                         <Button variant="outline" as-child>
                             <Link href="/planned-transactions">Batal</Link>
                         </Button>
-                        <Button type="submit" :disabled="form.processing">Perbarui Rencana</Button>
+                        <Button type="submit" :disabled="form.processing"
+                            >Perbarui Rencana</Button
+                        >
                     </CardFooter>
                 </form>
             </Card>
@@ -176,29 +230,52 @@ function submitCategory() {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Tambah Kategori Baru</DialogTitle>
-                    <DialogDescription>Buat kategori baru untuk mengorganisir transaksi Anda.</DialogDescription>
+                    <DialogDescription
+                        >Buat kategori baru untuk mengorganisir transaksi
+                        Anda.</DialogDescription
+                    >
                 </DialogHeader>
                 <form @submit.prevent="submitCategory">
                     <div class="space-y-4 py-4">
                         <div class="grid gap-2">
                             <Label for="cat-name">Nama Kategori</Label>
-                            <Input id="cat-name" v-model="categoryForm.name" placeholder="Contoh: Makanan" required />
+                            <Input
+                                id="cat-name"
+                                v-model="categoryForm.name"
+                                placeholder="Contoh: Makanan"
+                                required
+                            />
                             <InputError :message="categoryForm.errors.name" />
                         </div>
                         <div class="grid gap-2">
                             <Label for="cat-color">Warna</Label>
                             <div class="flex items-center gap-3">
-                                <input id="cat-color" v-model="categoryForm.color" type="color" class="h-10 w-14 cursor-pointer rounded-md border border-input bg-background p-1" />
-                                <Input v-model="categoryForm.color" placeholder="#3b82f6" class="flex-1" />
+                                <input
+                                    id="cat-color"
+                                    v-model="categoryForm.color"
+                                    type="color"
+                                    class="h-10 w-14 cursor-pointer rounded-md border border-input bg-background p-1"
+                                />
+                                <Input
+                                    v-model="categoryForm.color"
+                                    placeholder="#3b82f6"
+                                    class="flex-1"
+                                />
                             </div>
                             <InputError :message="categoryForm.errors.color" />
                         </div>
                     </div>
                     <DialogFooter>
                         <DialogClose as-child>
-                            <Button type="button" variant="outline">Batal</Button>
+                            <Button type="button" variant="outline"
+                                >Batal</Button
+                            >
                         </DialogClose>
-                        <Button type="submit" :disabled="categoryForm.processing">Simpan Kategori</Button>
+                        <Button
+                            type="submit"
+                            :disabled="categoryForm.processing"
+                            >Simpan Kategori</Button
+                        >
                     </DialogFooter>
                 </form>
             </DialogContent>

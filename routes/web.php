@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\Auth\EmailVerificationCodeController;
 use App\Http\Controllers\Auth\SocialiteController;
-use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PlannedTransactionController;
@@ -69,8 +69,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $request->user()->update([
             'notification_dismissed_version' => \App\Http\Middleware\HandleInertiaRequests::NOTIFICATION_VERSION,
         ]);
+
         return back();
     })->name('dismiss-notification');
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

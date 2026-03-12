@@ -49,7 +49,7 @@ class ProfileController extends Controller
             }
 
             $path = $request->file('avatar')->store('avatars', 'public');
-            $user->avatar = '/storage/' . $path;
+            $user->avatar = '/storage/'.$path;
         }
 
         if ($request->boolean('remove_avatar')) {

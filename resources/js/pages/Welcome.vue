@@ -751,25 +751,39 @@ const showSuggestionTooltip = ref(false);
             <div class="mb-12">
                 <div class="mb-4 flex items-center gap-2">
                     <CalendarClock class="h-5 w-5 text-emerald-600" />
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-[#EDEDEC]">
+                    <h3
+                        class="text-lg font-semibold text-gray-900 dark:text-[#EDEDEC]"
+                    >
                         Perencanaan Transaksi
                     </h3>
                 </div>
-                <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-[#2E2E2A] dark:bg-[#161615]">
-                    <div class="flex items-center justify-between border-b border-gray-200 p-4 dark:border-[#2E2E2A]">
+                <div
+                    class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-[#2E2E2A] dark:bg-[#161615]"
+                >
+                    <div
+                        class="flex items-center justify-between border-b border-gray-200 p-4 dark:border-[#2E2E2A]"
+                    >
                         <div class="flex items-center gap-3">
-                            <div class="flex h-9 items-center rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-500 dark:border-[#3E3E3A] dark:bg-[#1C1C1A] dark:text-[#A1A09A]">
+                            <div
+                                class="flex h-9 items-center rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-500 dark:border-[#3E3E3A] dark:bg-[#1C1C1A] dark:text-[#A1A09A]"
+                            >
                                 Semua Status
                             </div>
-                            <div class="flex h-9 items-center rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-500 dark:border-[#3E3E3A] dark:bg-[#1C1C1A] dark:text-[#A1A09A]">
+                            <div
+                                class="flex h-9 items-center rounded-lg border border-gray-200 bg-gray-50 px-3 text-sm text-gray-500 dark:border-[#3E3E3A] dark:bg-[#1C1C1A] dark:text-[#A1A09A]"
+                            >
                                 Semua Tipe
                             </div>
                         </div>
-                        <button class="h-9 rounded-lg bg-emerald-600 px-4 text-sm font-medium text-white">
+                        <button
+                            class="h-9 rounded-lg bg-emerald-600 px-4 text-sm font-medium text-white"
+                        >
                             + Buat Rencana
                         </button>
                     </div>
-                    <div class="grid gap-px bg-gray-200 sm:grid-cols-2 dark:bg-[#2E2E2A]">
+                    <div
+                        class="grid gap-px bg-gray-200 sm:grid-cols-2 dark:bg-[#2E2E2A]"
+                    >
                         <div
                             v-for="plan in plannedTransactions"
                             :key="plan.description"
@@ -779,44 +793,87 @@ const showSuggestionTooltip = ref(false);
                                 <div class="flex items-start gap-3">
                                     <div
                                         class="mt-0.5 flex h-8 w-8 items-center justify-center rounded-lg"
-                                        :class="plan.type === 'income' ? 'bg-emerald-50 dark:bg-emerald-900/20' : 'bg-red-50 dark:bg-red-900/20'"
+                                        :class="
+                                            plan.type === 'income'
+                                                ? 'bg-emerald-50 dark:bg-emerald-900/20'
+                                                : 'bg-red-50 dark:bg-red-900/20'
+                                        "
                                     >
                                         <CalendarClock
                                             class="h-4 w-4"
-                                            :class="plan.type === 'income' ? 'text-emerald-600' : 'text-red-500'"
+                                            :class="
+                                                plan.type === 'income'
+                                                    ? 'text-emerald-600'
+                                                    : 'text-red-500'
+                                            "
                                         />
                                     </div>
                                     <div>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-[#EDEDEC]">{{ plan.description }}</p>
-                                        <div class="mt-0.5 flex items-center gap-2">
-                                            <span class="flex items-center gap-1 text-xs text-gray-500 dark:text-[#A1A09A]">
-                                                <span class="h-2 w-2 rounded-full" :style="{ backgroundColor: plan.color }" />
+                                        <p
+                                            class="text-sm font-medium text-gray-900 dark:text-[#EDEDEC]"
+                                        >
+                                            {{ plan.description }}
+                                        </p>
+                                        <div
+                                            class="mt-0.5 flex items-center gap-2"
+                                        >
+                                            <span
+                                                class="flex items-center gap-1 text-xs text-gray-500 dark:text-[#A1A09A]"
+                                            >
+                                                <span
+                                                    class="h-2 w-2 rounded-full"
+                                                    :style="{
+                                                        backgroundColor:
+                                                            plan.color,
+                                                    }"
+                                                />
                                                 {{ plan.category }}
                                             </span>
-                                            <span class="text-xs text-gray-400 dark:text-[#A1A09A]">{{ plan.planned_date }}</span>
+                                            <span
+                                                class="text-xs text-gray-400 dark:text-[#A1A09A]"
+                                                >{{ plan.planned_date }}</span
+                                            >
                                         </div>
-                                        <p v-if="plan.notes" class="mt-0.5 text-xs text-gray-400 dark:text-[#A1A09A]/70">{{ plan.notes }}</p>
+                                        <p
+                                            v-if="plan.notes"
+                                            class="mt-0.5 text-xs text-gray-400 dark:text-[#A1A09A]/70"
+                                        >
+                                            {{ plan.notes }}
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="text-right">
                                     <span
                                         class="text-sm font-bold"
-                                        :class="plan.type === 'income' ? 'text-emerald-600' : 'text-red-500'"
+                                        :class="
+                                            plan.type === 'income'
+                                                ? 'text-emerald-600'
+                                                : 'text-red-500'
+                                        "
                                     >
-                                        {{ plan.type === 'income' ? '+' : '-' }}{{ formatCurrency(plan.amount) }}
+                                        {{ plan.type === 'income' ? '+' : '-'
+                                        }}{{ formatCurrency(plan.amount) }}
                                     </span>
                                     <div class="mt-1">
-                                        <span class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                                        <span
+                                            class="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
+                                        >
                                             Draft
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-2 flex items-center justify-end gap-2">
-                                <button class="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-600 transition hover:bg-gray-100 dark:border-[#3E3E3A] dark:text-[#A1A09A] dark:hover:bg-[#2E2E2A]">
+                            <div
+                                class="mt-2 flex items-center justify-end gap-2"
+                            >
+                                <button
+                                    class="inline-flex items-center gap-1 rounded-md border border-gray-200 px-2.5 py-1 text-xs font-medium text-gray-600 transition hover:bg-gray-100 dark:border-[#3E3E3A] dark:text-[#A1A09A] dark:hover:bg-[#2E2E2A]"
+                                >
                                     Edit
                                 </button>
-                                <button class="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white transition hover:bg-emerald-700">
+                                <button
+                                    class="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-2.5 py-1 text-xs font-medium text-white transition hover:bg-emerald-700"
+                                >
                                     <Send class="h-3 w-3" />
                                     Post
                                 </button>
@@ -830,72 +887,169 @@ const showSuggestionTooltip = ref(false);
             <div class="mb-12">
                 <div class="mb-4 flex items-center gap-2">
                     <BarChart3 class="h-5 w-5 text-emerald-600" />
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-[#EDEDEC]">
+                    <h3
+                        class="text-lg font-semibold text-gray-900 dark:text-[#EDEDEC]"
+                    >
                         Analitik
                     </h3>
                 </div>
-                <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-[#2E2E2A] dark:bg-[#161615]">
-                    <div class="grid grid-cols-2 gap-px border-b border-gray-200 bg-gray-200 lg:grid-cols-4 dark:border-[#2E2E2A] dark:bg-[#2E2E2A]">
+                <div
+                    class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-[#2E2E2A] dark:bg-[#161615]"
+                >
+                    <div
+                        class="grid grid-cols-2 gap-px border-b border-gray-200 bg-gray-200 lg:grid-cols-4 dark:border-[#2E2E2A] dark:bg-[#2E2E2A]"
+                    >
                         <div class="bg-white p-4 sm:p-6 dark:bg-[#161615]">
-                            <span class="text-xs font-medium text-gray-500 dark:text-[#A1A09A]">Total Pemasukan</span>
-                            <p class="mt-2 text-lg font-bold text-emerald-600 sm:text-2xl">Rp 108.2M</p>
-                            <span class="text-xs text-emerald-600">Tahun berjalan</span>
+                            <span
+                                class="text-xs font-medium text-gray-500 dark:text-[#A1A09A]"
+                                >Total Pemasukan</span
+                            >
+                            <p
+                                class="mt-2 text-lg font-bold text-emerald-600 sm:text-2xl"
+                            >
+                                Rp 108.2M
+                            </p>
+                            <span class="text-xs text-emerald-600"
+                                >Tahun berjalan</span
+                            >
                         </div>
                         <div class="bg-white p-4 sm:p-6 dark:bg-[#161615]">
-                            <span class="text-xs font-medium text-gray-500 dark:text-[#A1A09A]">Total Pengeluaran</span>
-                            <p class="mt-2 text-lg font-bold text-red-500 sm:text-2xl">Rp 45.8M</p>
-                            <span class="text-xs text-red-500">Tahun berjalan</span>
+                            <span
+                                class="text-xs font-medium text-gray-500 dark:text-[#A1A09A]"
+                                >Total Pengeluaran</span
+                            >
+                            <p
+                                class="mt-2 text-lg font-bold text-red-500 sm:text-2xl"
+                            >
+                                Rp 45.8M
+                            </p>
+                            <span class="text-xs text-red-500"
+                                >Tahun berjalan</span
+                            >
                         </div>
                         <div class="bg-white p-4 sm:p-6 dark:bg-[#161615]">
-                            <span class="text-xs font-medium text-gray-500 dark:text-[#A1A09A]">Selisih</span>
-                            <p class="mt-2 text-lg font-bold text-gray-900 sm:text-2xl dark:text-[#EDEDEC]">Rp 62.4M</p>
+                            <span
+                                class="text-xs font-medium text-gray-500 dark:text-[#A1A09A]"
+                                >Selisih</span
+                            >
+                            <p
+                                class="mt-2 text-lg font-bold text-gray-900 sm:text-2xl dark:text-[#EDEDEC]"
+                            >
+                                Rp 62.4M
+                            </p>
                             <span class="text-xs text-emerald-600">+57.7%</span>
                         </div>
                         <div class="bg-white p-4 sm:p-6 dark:bg-[#161615]">
-                            <span class="text-xs font-medium text-gray-500 dark:text-[#A1A09A]">Transaksi</span>
-                            <p class="mt-2 text-lg font-bold text-gray-900 sm:text-2xl dark:text-[#EDEDEC]">284</p>
-                            <span class="text-xs text-gray-500 dark:text-[#A1A09A]">Tahun berjalan</span>
+                            <span
+                                class="text-xs font-medium text-gray-500 dark:text-[#A1A09A]"
+                                >Transaksi</span
+                            >
+                            <p
+                                class="mt-2 text-lg font-bold text-gray-900 sm:text-2xl dark:text-[#EDEDEC]"
+                            >
+                                284
+                            </p>
+                            <span
+                                class="text-xs text-gray-500 dark:text-[#A1A09A]"
+                                >Tahun berjalan</span
+                            >
                         </div>
                     </div>
                     <div class="p-4 sm:p-6">
-                        <h4 class="mb-4 text-sm font-semibold text-gray-900 dark:text-[#EDEDEC]">Grafik Tren Pendapatan & Pengeluaran</h4>
+                        <h4
+                            class="mb-4 text-sm font-semibold text-gray-900 dark:text-[#EDEDEC]"
+                        >
+                            Grafik Tren Pendapatan & Pengeluaran
+                        </h4>
                         <!-- SVG Wave Chart Preview -->
                         <div class="relative" style="height: 160px">
-                            <svg viewBox="0 0 600 160" class="h-full w-full" preserveAspectRatio="none">
+                            <svg
+                                viewBox="0 0 600 160"
+                                class="h-full w-full"
+                                preserveAspectRatio="none"
+                            >
                                 <!-- Income line -->
                                 <path
                                     d="M0,100 C50,80 100,60 150,50 C200,40 250,45 300,35 C350,25 400,30 450,20 C500,15 550,25 600,10"
-                                    fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round"
+                                    fill="none"
+                                    stroke="#22C55E"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
                                 />
                                 <path
                                     d="M0,100 C50,80 100,60 150,50 C200,40 250,45 300,35 C350,25 400,30 450,20 C500,15 550,25 600,10 V160 H0 Z"
-                                    fill="url(#incomeGradient)" opacity="0.15"
+                                    fill="url(#incomeGradient)"
+                                    opacity="0.15"
                                 />
                                 <!-- Expense line -->
                                 <path
                                     d="M0,130 C50,120 100,125 150,110 C200,115 250,120 300,105 C350,110 400,100 450,95 C500,105 550,100 600,90"
-                                    fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round"
+                                    fill="none"
+                                    stroke="#EF4444"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
                                 />
                                 <path
                                     d="M0,130 C50,120 100,125 150,110 C200,115 250,120 300,105 C350,110 400,100 450,95 C500,105 550,100 600,90 V160 H0 Z"
-                                    fill="url(#expenseGradient)" opacity="0.1"
+                                    fill="url(#expenseGradient)"
+                                    opacity="0.1"
                                 />
                                 <defs>
-                                    <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#22C55E" />
-                                        <stop offset="100%" stop-color="#22C55E" stop-opacity="0" />
+                                    <linearGradient
+                                        id="incomeGradient"
+                                        x1="0"
+                                        y1="0"
+                                        x2="0"
+                                        y2="1"
+                                    >
+                                        <stop
+                                            offset="0%"
+                                            stop-color="#22C55E"
+                                        />
+                                        <stop
+                                            offset="100%"
+                                            stop-color="#22C55E"
+                                            stop-opacity="0"
+                                        />
                                     </linearGradient>
-                                    <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="0%" stop-color="#EF4444" />
-                                        <stop offset="100%" stop-color="#EF4444" stop-opacity="0" />
+                                    <linearGradient
+                                        id="expenseGradient"
+                                        x1="0"
+                                        y1="0"
+                                        x2="0"
+                                        y2="1"
+                                    >
+                                        <stop
+                                            offset="0%"
+                                            stop-color="#EF4444"
+                                        />
+                                        <stop
+                                            offset="100%"
+                                            stop-color="#EF4444"
+                                            stop-opacity="0"
+                                        />
                                     </linearGradient>
                                 </defs>
                             </svg>
                         </div>
-                        <div class="mt-3 flex items-center gap-4 text-xs text-gray-500 dark:text-[#A1A09A]">
-                            <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-emerald-500" /> Pemasukan</span>
-                            <span class="flex items-center gap-1"><span class="h-2 w-2 rounded-full bg-red-500" /> Pengeluaran</span>
-                            <span class="ml-auto text-[10px]">Filter: Tanggal, Bulan, Tahun, Kategori</span>
+                        <div
+                            class="mt-3 flex items-center gap-4 text-xs text-gray-500 dark:text-[#A1A09A]"
+                        >
+                            <span class="flex items-center gap-1"
+                                ><span
+                                    class="h-2 w-2 rounded-full bg-emerald-500"
+                                />
+                                Pemasukan</span
+                            >
+                            <span class="flex items-center gap-1"
+                                ><span
+                                    class="h-2 w-2 rounded-full bg-red-500"
+                                />
+                                Pengeluaran</span
+                            >
+                            <span class="ml-auto text-[10px]"
+                                >Filter: Tanggal, Bulan, Tahun, Kategori</span
+                            >
                         </div>
                     </div>
                 </div>
@@ -1274,13 +1428,15 @@ const showSuggestionTooltip = ref(false);
         </footer>
 
         <!-- Floating Suggestion Button -->
-        <div class="fixed bottom-6 right-6 z-50">
+        <div class="fixed right-6 bottom-6 z-50">
             <div
                 v-if="showSuggestionTooltip"
-                class="absolute bottom-full right-0 mb-2 w-48 rounded-lg bg-gray-900 p-2 text-center text-xs text-white shadow-lg dark:bg-[#2E2E2A]"
+                class="absolute right-0 bottom-full mb-2 w-48 rounded-lg bg-gray-900 p-2 text-center text-xs text-white shadow-lg dark:bg-[#2E2E2A]"
             >
                 Punya saran? Bantu kami lebih baik!
-                <div class="absolute -bottom-1 right-5 h-2 w-2 rotate-45 bg-gray-900 dark:bg-[#2E2E2A]" />
+                <div
+                    class="absolute right-5 -bottom-1 h-2 w-2 rotate-45 bg-gray-900 dark:bg-[#2E2E2A]"
+                />
             </div>
             <Link
                 v-if="$page.props.auth.user"
@@ -1289,7 +1445,9 @@ const showSuggestionTooltip = ref(false);
                 @mouseenter="showSuggestionTooltip = true"
                 @mouseleave="showSuggestionTooltip = false"
             >
-                <MessageSquarePlus class="h-6 w-6 transition-transform group-hover:scale-110" />
+                <MessageSquarePlus
+                    class="h-6 w-6 transition-transform group-hover:scale-110"
+                />
             </Link>
             <Link
                 v-else
@@ -1298,7 +1456,9 @@ const showSuggestionTooltip = ref(false);
                 @mouseenter="showSuggestionTooltip = true"
                 @mouseleave="showSuggestionTooltip = false"
             >
-                <MessageSquarePlus class="h-6 w-6 transition-transform group-hover:scale-110" />
+                <MessageSquarePlus
+                    class="h-6 w-6 transition-transform group-hover:scale-110"
+                />
             </Link>
         </div>
     </div>

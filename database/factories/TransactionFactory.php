@@ -35,7 +35,7 @@ class TransactionFactory extends Factory
      */
     public function income(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => 'income',
         ]);
     }
@@ -45,7 +45,7 @@ class TransactionFactory extends Factory
      */
     public function expense(): static
     {
-        return $this->state(fn(array $attributes) => [
+        return $this->state(fn (array $attributes) => [
             'type' => 'expense',
         ]);
     }

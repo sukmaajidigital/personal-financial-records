@@ -73,7 +73,7 @@ function triggerAvatarInput() {
                 <Form
                     v-bind="ProfileController.update.form()"
                     class="space-y-6"
-                    v-slot="{ errors, processing, recentlySuccessful }"
+                    v-slot="{ errors, processing }"
                 >
                     <!-- Avatar Section -->
                     <div class="flex items-center gap-6">

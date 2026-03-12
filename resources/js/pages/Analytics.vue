@@ -13,7 +13,7 @@ import {
     Wallet,
     Zap,
 } from 'lucide-vue-next';
-import { computed, reactive, ref, watch } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -66,8 +66,12 @@ const filters = reactive({
     date_from: props.filters.date_from || '',
     date_to: props.filters.date_to || '',
     month: props.filters.month ? String(props.filters.month) : '',
-    year: props.filters.year ? String(props.filters.year) : String(new Date().getFullYear()),
-    category_id: props.filters.category_id ? String(props.filters.category_id) : '',
+    year: props.filters.year
+        ? String(props.filters.year)
+        : String(new Date().getFullYear()),
+    category_id: props.filters.category_id
+        ? String(props.filters.category_id)
+        : '',
     type: props.filters.type || '',
 });
 
@@ -86,7 +90,10 @@ function applyFilters() {
     }
     if (filters.category_id) params.category_id = filters.category_id;
     if (filters.type) params.type = filters.type;
-    router.get('/analytics', params, { preserveState: true, preserveScroll: true });
+    router.get('/analytics', params, {
+        preserveState: true,
+        preserveScroll: true,
+    });
 }
 
 function resetFilters() {
@@ -120,7 +127,10 @@ function formatDate(date: string): string {
 function formatMonth(month: string): string {
     const [year, m] = month.split('-');
     const date = new Date(Number(year), Number(m) - 1);
-    return new Intl.DateTimeFormat('id-ID', { month: 'short', year: '2-digit' }).format(date);
+    return new Intl.DateTimeFormat('id-ID', {
+        month: 'short',
+        year: '2-digit',
+    }).format(date);
 }
 
 function formatShortDate(date: string): string {
@@ -158,7 +168,10 @@ const plotHeight = chartHeight - chartPadding.top - chartPadding.bottom;
 const maxDailyValue = computed(() => {
     if (props.dailyTrend.length === 0) return 1;
     return Math.max(
-        ...props.dailyTrend.flatMap((t) => [Number(t.income), Number(t.expense)]),
+        ...props.dailyTrend.flatMap((t) => [
+            Number(t.income),
+            Number(t.expense),
+        ]),
         1,
     );
 });
@@ -169,7 +182,11 @@ function getX(index: number, total: number): number {
 }
 
 function getY(value: number): number {
-    return chartPadding.top + plotHeight - (value / maxDailyValue.value) * plotHeight;
+    return (
+        chartPadding.top +
+        plotHeight -
+        (value / maxDailyValue.value) * plotHeight
+    );
 }
 
 function buildSmoothPath(data: { value: number }[]): string {
@@ -239,7 +256,11 @@ const yAxisTicks = computed(() => {
 
 const xAxisLabels = computed(() => {
     const data = props.dailyTrend;
-    if (data.length <= 10) return data.map((d, i) => ({ index: i, label: formatShortDate(d.day) }));
+    if (data.length <= 10)
+        return data.map((d, i) => ({
+            index: i,
+            label: formatShortDate(d.day),
+        }));
     const step = Math.max(1, Math.floor(data.length / 8));
     return data
         .map((d, i) => ({ index: i, label: formatShortDate(d.day) }))
@@ -282,16 +303,27 @@ function getDonutSegments(data: CategoryBreakdown[]) {
     });
 }
 
-const expenseDonutSegments = computed(() => getDonutSegments(props.expenseByCategory));
-const incomeDonutSegments = computed(() => getDonutSegments(props.incomeByCategory));
+const expenseDonutSegments = computed(() =>
+    getDonutSegments(props.expenseByCategory),
+);
+const incomeDonutSegments = computed(() =>
+    getDonutSegments(props.incomeByCategory),
+);
 
-const totalExpense = computed(() => props.expenseByCategory.reduce((s, c) => s + Number(c.total), 0));
-const totalIncome = computed(() => props.incomeByCategory.reduce((s, c) => s + Number(c.total), 0));
+const totalExpense = computed(() =>
+    props.expenseByCategory.reduce((s, c) => s + Number(c.total), 0),
+);
+const totalIncome = computed(() =>
+    props.incomeByCategory.reduce((s, c) => s + Number(c.total), 0),
+);
 
 // ── Monthly Trend ──────────────────────────────────────────────
 const maxMonthlyValue = computed(() => {
     return Math.max(
-        ...props.monthlyTrend.flatMap((t) => [Number(t.income), Number(t.expense)]),
+        ...props.monthlyTrend.flatMap((t) => [
+            Number(t.income),
+            Number(t.expense),
+        ]),
         1,
     );
 });
@@ -329,20 +361,32 @@ function hideTooltip() {
 // ── Active filter description ───────────────────────────────────
 const filterDescription = computed(() => {
     const parts: string[] = [];
-    if (filterMode.value === 'range' && props.filters.date_from && props.filters.date_to) {
-        parts.push(`${formatDate(props.filters.date_from)} – ${formatDate(props.filters.date_to)}`);
+    if (
+        filterMode.value === 'range' &&
+        props.filters.date_from &&
+        props.filters.date_to
+    ) {
+        parts.push(
+            `${formatDate(props.filters.date_from)} – ${formatDate(props.filters.date_to)}`,
+        );
     } else {
         if (props.filters.month) {
-            const m = months.find((m) => m.value === String(props.filters.month));
+            const m = months.find(
+                (m) => m.value === String(props.filters.month),
+            );
             parts.push(m?.label || '');
         }
         parts.push(String(props.filters.year || currentYear));
     }
     if (props.filters.type) {
-        parts.push(props.filters.type === 'income' ? 'Pemasukan' : 'Pengeluaran');
+        parts.push(
+            props.filters.type === 'income' ? 'Pemasukan' : 'Pengeluaran',
+        );
     }
     if (props.filters.category_id) {
-        const cat = props.categories.find((c) => c.id === Number(props.filters.category_id));
+        const cat = props.categories.find(
+            (c) => c.id === Number(props.filters.category_id),
+        );
         if (cat) parts.push(cat.name);
     }
     return parts.join(' · ');
@@ -355,10 +399,14 @@ const filterDescription = computed(() => {
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-col gap-6 p-4 md:p-6">
             <!-- Page Header -->
-            <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div
+                class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+            >
                 <div>
                     <h1 class="text-2xl font-bold tracking-tight">Analytics</h1>
-                    <p class="text-sm text-muted-foreground">{{ filterDescription }}</p>
+                    <p class="text-sm text-muted-foreground">
+                        {{ filterDescription }}
+                    </p>
                 </div>
             </div>
 
@@ -370,7 +418,11 @@ const filterDescription = computed(() => {
                         <div class="flex items-center gap-2">
                             <Button
                                 size="sm"
-                                :variant="filterMode === 'year' ? 'default' : 'outline'"
+                                :variant="
+                                    filterMode === 'year'
+                                        ? 'default'
+                                        : 'outline'
+                                "
                                 @click="filterMode = 'year'"
                             >
                                 <CalendarDays class="mr-1.5 size-3.5" />
@@ -378,7 +430,11 @@ const filterDescription = computed(() => {
                             </Button>
                             <Button
                                 size="sm"
-                                :variant="filterMode === 'range' ? 'default' : 'outline'"
+                                :variant="
+                                    filterMode === 'range'
+                                        ? 'default'
+                                        : 'outline'
+                                "
                                 @click="filterMode = 'range'"
                             >
                                 <Filter class="mr-1.5 size-3.5" />
@@ -390,54 +446,104 @@ const filterDescription = computed(() => {
                             <!-- Year/Month OR Date Range -->
                             <template v-if="filterMode === 'year'">
                                 <div>
-                                    <label class="mb-1.5 block text-xs font-medium text-muted-foreground">Tahun</label>
+                                    <label
+                                        class="mb-1.5 block text-xs font-medium text-muted-foreground"
+                                        >Tahun</label
+                                    >
                                     <Select v-model="filters.year">
-                                        <SelectTrigger><SelectValue placeholder="Pilih tahun" /></SelectTrigger>
+                                        <SelectTrigger
+                                            ><SelectValue
+                                                placeholder="Pilih tahun"
+                                        /></SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem v-for="y in years" :key="y" :value="y">{{ y }}</SelectItem>
+                                            <SelectItem
+                                                v-for="y in years"
+                                                :key="y"
+                                                :value="y"
+                                                >{{ y }}</SelectItem
+                                            >
                                         </SelectContent>
                                     </Select>
                                 </div>
                                 <div>
-                                    <label class="mb-1.5 block text-xs font-medium text-muted-foreground">Bulan</label>
+                                    <label
+                                        class="mb-1.5 block text-xs font-medium text-muted-foreground"
+                                        >Bulan</label
+                                    >
                                     <Select v-model="filters.month">
-                                        <SelectTrigger><SelectValue placeholder="Semua bulan" /></SelectTrigger>
+                                        <SelectTrigger
+                                            ><SelectValue
+                                                placeholder="Semua bulan"
+                                        /></SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="">Semua Bulan</SelectItem>
-                                            <SelectItem v-for="m in months" :key="m.value" :value="m.value">{{ m.label }}</SelectItem>
+                                            <SelectItem value=""
+                                                >Semua Bulan</SelectItem
+                                            >
+                                            <SelectItem
+                                                v-for="m in months"
+                                                :key="m.value"
+                                                :value="m.value"
+                                                >{{ m.label }}</SelectItem
+                                            >
                                         </SelectContent>
                                     </Select>
                                 </div>
                             </template>
                             <template v-else>
                                 <div>
-                                    <label class="mb-1.5 block text-xs font-medium text-muted-foreground">Dari Tanggal</label>
+                                    <label
+                                        class="mb-1.5 block text-xs font-medium text-muted-foreground"
+                                        >Dari Tanggal</label
+                                    >
                                     <input
                                         v-model="filters.date_from"
                                         type="date"
-                                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
                                     />
                                 </div>
                                 <div>
-                                    <label class="mb-1.5 block text-xs font-medium text-muted-foreground">Sampai Tanggal</label>
+                                    <label
+                                        class="mb-1.5 block text-xs font-medium text-muted-foreground"
+                                        >Sampai Tanggal</label
+                                    >
                                     <input
                                         v-model="filters.date_to"
                                         type="date"
-                                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                                        class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
                                     />
                                 </div>
                             </template>
 
                             <!-- Category Filter -->
                             <div>
-                                <label class="mb-1.5 block text-xs font-medium text-muted-foreground">Kategori</label>
+                                <label
+                                    class="mb-1.5 block text-xs font-medium text-muted-foreground"
+                                    >Kategori</label
+                                >
                                 <Select v-model="filters.category_id">
-                                    <SelectTrigger><SelectValue placeholder="Semua kategori" /></SelectTrigger>
+                                    <SelectTrigger
+                                        ><SelectValue
+                                            placeholder="Semua kategori"
+                                    /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">Semua Kategori</SelectItem>
-                                        <SelectItem v-for="cat in props.categories" :key="cat.id" :value="String(cat.id)">
-                                            <div class="flex items-center gap-2">
-                                                <span class="size-2 rounded-full" :style="{ backgroundColor: cat.color }" />
+                                        <SelectItem value=""
+                                            >Semua Kategori</SelectItem
+                                        >
+                                        <SelectItem
+                                            v-for="cat in props.categories"
+                                            :key="cat.id"
+                                            :value="String(cat.id)"
+                                        >
+                                            <div
+                                                class="flex items-center gap-2"
+                                            >
+                                                <span
+                                                    class="size-2 rounded-full"
+                                                    :style="{
+                                                        backgroundColor:
+                                                            cat.color,
+                                                    }"
+                                                />
                                                 {{ cat.name }}
                                             </div>
                                         </SelectItem>
@@ -447,13 +553,24 @@ const filterDescription = computed(() => {
 
                             <!-- Type Filter -->
                             <div>
-                                <label class="mb-1.5 block text-xs font-medium text-muted-foreground">Tipe</label>
+                                <label
+                                    class="mb-1.5 block text-xs font-medium text-muted-foreground"
+                                    >Tipe</label
+                                >
                                 <Select v-model="filters.type">
-                                    <SelectTrigger><SelectValue placeholder="Semua tipe" /></SelectTrigger>
+                                    <SelectTrigger
+                                        ><SelectValue placeholder="Semua tipe"
+                                    /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="">Semua Tipe</SelectItem>
-                                        <SelectItem value="income">Pemasukan</SelectItem>
-                                        <SelectItem value="expense">Pengeluaran</SelectItem>
+                                        <SelectItem value=""
+                                            >Semua Tipe</SelectItem
+                                        >
+                                        <SelectItem value="income"
+                                            >Pemasukan</SelectItem
+                                        >
+                                        <SelectItem value="expense"
+                                            >Pengeluaran</SelectItem
+                                        >
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -474,67 +591,127 @@ const filterDescription = computed(() => {
             </Card>
 
             <!-- Summary Cards -->
-            <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+            <div
+                class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
+            >
                 <Card>
-                    <CardHeader class="flex flex-row items-center justify-between pb-2">
-                        <CardTitle class="text-sm font-medium">Total Pemasukan</CardTitle>
+                    <CardHeader
+                        class="flex flex-row items-center justify-between pb-2"
+                    >
+                        <CardTitle class="text-sm font-medium"
+                            >Total Pemasukan</CardTitle
+                        >
                         <TrendingUp class="size-4 text-green-600" />
                     </CardHeader>
                     <CardContent>
-                        <div class="text-xl font-bold text-green-600">{{ formatCurrency(props.summary.totalIncome) }}</div>
+                        <div class="text-xl font-bold text-green-600">
+                            {{ formatCurrency(props.summary.totalIncome) }}
+                        </div>
                     </CardContent>
                 </Card>
 
                 <Card>
-                    <CardHeader class="flex flex-row items-center justify-between pb-2">
-                        <CardTitle class="text-sm font-medium">Total Pengeluaran</CardTitle>
+                    <CardHeader
+                        class="flex flex-row items-center justify-between pb-2"
+                    >
+                        <CardTitle class="text-sm font-medium"
+                            >Total Pengeluaran</CardTitle
+                        >
                         <TrendingDown class="size-4 text-red-600" />
                     </CardHeader>
                     <CardContent>
-                        <div class="text-xl font-bold text-red-600">{{ formatCurrency(props.summary.totalExpense) }}</div>
+                        <div class="text-xl font-bold text-red-600">
+                            {{ formatCurrency(props.summary.totalExpense) }}
+                        </div>
                     </CardContent>
                 </Card>
 
                 <Card>
-                    <CardHeader class="flex flex-row items-center justify-between pb-2">
-                        <CardTitle class="text-sm font-medium">Saldo Bersih</CardTitle>
+                    <CardHeader
+                        class="flex flex-row items-center justify-between pb-2"
+                    >
+                        <CardTitle class="text-sm font-medium"
+                            >Saldo Bersih</CardTitle
+                        >
                         <Wallet class="size-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div class="text-xl font-bold" :class="props.summary.balance >= 0 ? 'text-green-600' : 'text-red-600'">
+                        <div
+                            class="text-xl font-bold"
+                            :class="
+                                props.summary.balance >= 0
+                                    ? 'text-green-600'
+                                    : 'text-red-600'
+                            "
+                        >
                             {{ formatCurrency(props.summary.balance) }}
                         </div>
                     </CardContent>
                 </Card>
 
                 <Card>
-                    <CardHeader class="flex flex-row items-center justify-between pb-2">
-                        <CardTitle class="text-sm font-medium">Total Transaksi</CardTitle>
+                    <CardHeader
+                        class="flex flex-row items-center justify-between pb-2"
+                    >
+                        <CardTitle class="text-sm font-medium"
+                            >Total Transaksi</CardTitle
+                        >
                         <BarChart3 class="size-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div class="text-xl font-bold">{{ props.summary.totalTransactions }}</div>
+                        <div class="text-xl font-bold">
+                            {{ props.summary.totalTransactions }}
+                        </div>
                     </CardContent>
                 </Card>
 
                 <Card>
-                    <CardHeader class="flex flex-row items-center justify-between pb-2">
-                        <CardTitle class="text-sm font-medium">Rata-rata Pengeluaran</CardTitle>
+                    <CardHeader
+                        class="flex flex-row items-center justify-between pb-2"
+                    >
+                        <CardTitle class="text-sm font-medium"
+                            >Rata-rata Pengeluaran</CardTitle
+                        >
                         <DollarSign class="size-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div class="text-xl font-bold">{{ formatCurrency(props.summary.avgExpense) }}</div>
+                        <div class="text-xl font-bold">
+                            {{ formatCurrency(props.summary.avgExpense) }}
+                        </div>
                     </CardContent>
                 </Card>
 
                 <Card>
-                    <CardHeader class="flex flex-row items-center justify-between pb-2">
-                        <CardTitle class="text-sm font-medium">Rasio Tabungan</CardTitle>
+                    <CardHeader
+                        class="flex flex-row items-center justify-between pb-2"
+                    >
+                        <CardTitle class="text-sm font-medium"
+                            >Rasio Tabungan</CardTitle
+                        >
                         <Zap class="size-4 text-amber-500" />
                     </CardHeader>
                     <CardContent>
-                        <div class="text-xl font-bold" :class="props.summary.totalIncome > 0 ? (props.summary.balance / props.summary.totalIncome >= 0.2 ? 'text-green-600' : 'text-amber-500') : 'text-muted-foreground'">
-                            {{ props.summary.totalIncome > 0 ? ((props.summary.balance / props.summary.totalIncome) * 100).toFixed(1) : '0' }}%
+                        <div
+                            class="text-xl font-bold"
+                            :class="
+                                props.summary.totalIncome > 0
+                                    ? props.summary.balance /
+                                          props.summary.totalIncome >=
+                                      0.2
+                                        ? 'text-green-600'
+                                        : 'text-amber-500'
+                                    : 'text-muted-foreground'
+                            "
+                        >
+                            {{
+                                props.summary.totalIncome > 0
+                                    ? (
+                                          (props.summary.balance /
+                                              props.summary.totalIncome) *
+                                          100
+                                      ).toFixed(1)
+                                    : '0'
+                            }}%
                         </div>
                     </CardContent>
                 </Card>
@@ -546,22 +723,34 @@ const filterDescription = computed(() => {
                     <div class="flex items-center justify-between">
                         <div class="space-y-1">
                             <CardTitle>Tren Harian</CardTitle>
-                            <CardDescription>Pemasukan vs Pengeluaran per hari</CardDescription>
+                            <CardDescription
+                                >Pemasukan vs Pengeluaran per
+                                hari</CardDescription
+                            >
                         </div>
                         <div class="flex items-center gap-4 text-sm">
                             <div class="flex items-center gap-1.5">
-                                <span class="size-3 rounded-full bg-green-500" />
-                                <span class="text-muted-foreground">Pemasukan</span>
+                                <span
+                                    class="size-3 rounded-full bg-green-500"
+                                />
+                                <span class="text-muted-foreground"
+                                    >Pemasukan</span
+                                >
                             </div>
                             <div class="flex items-center gap-1.5">
                                 <span class="size-3 rounded-full bg-red-500" />
-                                <span class="text-muted-foreground">Pengeluaran</span>
+                                <span class="text-muted-foreground"
+                                    >Pengeluaran</span
+                                >
                             </div>
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent>
-                    <div v-if="props.dailyTrend.length === 0" class="flex h-64 items-center justify-center text-sm text-muted-foreground">
+                    <div
+                        v-if="props.dailyTrend.length === 0"
+                        class="flex h-64 items-center justify-center text-sm text-muted-foreground"
+                    >
                         Tidak ada data untuk periode ini.
                     </div>
                     <div v-else class="relative overflow-x-auto">
@@ -571,13 +760,41 @@ const filterDescription = computed(() => {
                             preserveAspectRatio="xMidYMid meet"
                         >
                             <defs>
-                                <linearGradient id="incomeGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="rgb(34, 197, 94)" stop-opacity="0.3" />
-                                    <stop offset="100%" stop-color="rgb(34, 197, 94)" stop-opacity="0.02" />
+                                <linearGradient
+                                    id="incomeGradient"
+                                    x1="0"
+                                    y1="0"
+                                    x2="0"
+                                    y2="1"
+                                >
+                                    <stop
+                                        offset="0%"
+                                        stop-color="rgb(34, 197, 94)"
+                                        stop-opacity="0.3"
+                                    />
+                                    <stop
+                                        offset="100%"
+                                        stop-color="rgb(34, 197, 94)"
+                                        stop-opacity="0.02"
+                                    />
                                 </linearGradient>
-                                <linearGradient id="expenseGradient" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stop-color="rgb(239, 68, 68)" stop-opacity="0.3" />
-                                    <stop offset="100%" stop-color="rgb(239, 68, 68)" stop-opacity="0.02" />
+                                <linearGradient
+                                    id="expenseGradient"
+                                    x1="0"
+                                    y1="0"
+                                    x2="0"
+                                    y2="1"
+                                >
+                                    <stop
+                                        offset="0%"
+                                        stop-color="rgb(239, 68, 68)"
+                                        stop-opacity="0.3"
+                                    />
+                                    <stop
+                                        offset="100%"
+                                        stop-color="rgb(239, 68, 68)"
+                                        stop-opacity="0.02"
+                                    />
                                 </linearGradient>
                             </defs>
 
@@ -604,7 +821,13 @@ const filterDescription = computed(() => {
                                 text-anchor="end"
                                 class="fill-muted-foreground text-[10px]"
                             >
-                                {{ tick >= 1000000 ? (tick / 1000000).toFixed(1) + 'M' : tick >= 1000 ? (tick / 1000).toFixed(0) + 'K' : tick }}
+                                {{
+                                    tick >= 1000000
+                                        ? (tick / 1000000).toFixed(1) + 'M'
+                                        : tick >= 1000
+                                          ? (tick / 1000).toFixed(0) + 'K'
+                                          : tick
+                                }}
                             </text>
 
                             <!-- X-axis labels -->
@@ -620,8 +843,14 @@ const filterDescription = computed(() => {
                             </text>
 
                             <!-- Area fills -->
-                            <path :d="incomeAreaPath" fill="url(#incomeGradient)" />
-                            <path :d="expenseAreaPath" fill="url(#expenseGradient)" />
+                            <path
+                                :d="incomeAreaPath"
+                                fill="url(#incomeGradient)"
+                            />
+                            <path
+                                :d="expenseAreaPath"
+                                fill="url(#expenseGradient)"
+                            />
 
                             <!-- Lines -->
                             <path
@@ -642,7 +871,10 @@ const filterDescription = computed(() => {
                             />
 
                             <!-- Dots & hover zones -->
-                            <g v-for="(trend, i) in props.dailyTrend" :key="'dot-' + i">
+                            <g
+                                v-for="(trend, i) in props.dailyTrend"
+                                :key="'dot-' + i"
+                            >
                                 <circle
                                     :cx="getX(i, props.dailyTrend.length)"
                                     :cy="getY(Number(trend.income))"
@@ -674,11 +906,21 @@ const filterDescription = computed(() => {
                         <div
                             v-if="tooltipData.show"
                             class="pointer-events-none absolute z-10 rounded-lg border bg-popover px-3 py-2 text-xs shadow-lg"
-                            :style="{ left: tooltipData.x + 'px', top: tooltipData.y + 'px', transform: 'translate(-50%, -100%)' }"
+                            :style="{
+                                left: tooltipData.x + 'px',
+                                top: tooltipData.y + 'px',
+                                transform: 'translate(-50%, -100%)',
+                            }"
                         >
-                            <p class="font-medium mb-1">{{ formatShortDate(tooltipData.day) }}</p>
-                            <p class="text-green-600">+ {{ formatCurrency(tooltipData.income) }}</p>
-                            <p class="text-red-600">- {{ formatCurrency(tooltipData.expense) }}</p>
+                            <p class="mb-1 font-medium">
+                                {{ formatShortDate(tooltipData.day) }}
+                            </p>
+                            <p class="text-green-600">
+                                + {{ formatCurrency(tooltipData.income) }}
+                            </p>
+                            <p class="text-red-600">
+                                - {{ formatCurrency(tooltipData.expense) }}
+                            </p>
                         </div>
                     </div>
                 </CardContent>
@@ -690,13 +932,22 @@ const filterDescription = computed(() => {
                 <Card>
                     <CardHeader>
                         <CardTitle>Pengeluaran per Kategori</CardTitle>
-                        <CardDescription>Total: {{ formatCurrency(totalExpense) }}</CardDescription>
+                        <CardDescription
+                            >Total:
+                            {{ formatCurrency(totalExpense) }}</CardDescription
+                        >
                     </CardHeader>
                     <CardContent>
-                        <div v-if="props.expenseByCategory.length === 0" class="flex h-48 items-center justify-center text-sm text-muted-foreground">
+                        <div
+                            v-if="props.expenseByCategory.length === 0"
+                            class="flex h-48 items-center justify-center text-sm text-muted-foreground"
+                        >
                             Tidak ada data pengeluaran.
                         </div>
-                        <div v-else class="flex flex-col items-center gap-6 sm:flex-row">
+                        <div
+                            v-else
+                            class="flex flex-col items-center gap-6 sm:flex-row"
+                        >
                             <!-- Donut -->
                             <svg viewBox="0 0 200 200" class="size-44 shrink-0">
                                 <path
@@ -708,24 +959,56 @@ const filterDescription = computed(() => {
                                     stroke-width="2"
                                     class="transition-opacity hover:opacity-80"
                                 />
-                                <circle cx="100" cy="100" r="50" fill="var(--color-background)" />
-                                <text x="100" y="96" text-anchor="middle" class="fill-foreground text-lg font-bold" dominant-baseline="middle">
+                                <circle
+                                    cx="100"
+                                    cy="100"
+                                    r="50"
+                                    fill="var(--color-background)"
+                                />
+                                <text
+                                    x="100"
+                                    y="96"
+                                    text-anchor="middle"
+                                    class="fill-foreground text-lg font-bold"
+                                    dominant-baseline="middle"
+                                >
                                     {{ expenseDonutSegments.length }}
                                 </text>
-                                <text x="100" y="114" text-anchor="middle" class="fill-muted-foreground text-[10px]" dominant-baseline="middle">
+                                <text
+                                    x="100"
+                                    y="114"
+                                    text-anchor="middle"
+                                    class="fill-muted-foreground text-[10px]"
+                                    dominant-baseline="middle"
+                                >
                                     kategori
                                 </text>
                             </svg>
                             <!-- Legend -->
                             <div class="flex-1 space-y-2">
-                                <div v-for="seg in expenseDonutSegments" :key="seg.name" class="flex items-center justify-between text-sm">
+                                <div
+                                    v-for="seg in expenseDonutSegments"
+                                    :key="seg.name"
+                                    class="flex items-center justify-between text-sm"
+                                >
                                     <div class="flex items-center gap-2">
-                                        <span class="size-2.5 rounded-full" :style="{ backgroundColor: seg.color }" />
+                                        <span
+                                            class="size-2.5 rounded-full"
+                                            :style="{
+                                                backgroundColor: seg.color,
+                                            }"
+                                        />
                                         <span>{{ seg.name }}</span>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <span class="font-medium">{{ formatCurrency(seg.total) }}</span>
-                                        <Badge variant="outline" class="text-[10px]">{{ seg.percentage }}%</Badge>
+                                        <span class="font-medium">{{
+                                            formatCurrency(seg.total)
+                                        }}</span>
+                                        <Badge
+                                            variant="outline"
+                                            class="text-[10px]"
+                                            >{{ seg.percentage }}%</Badge
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -737,13 +1020,22 @@ const filterDescription = computed(() => {
                 <Card>
                     <CardHeader>
                         <CardTitle>Pemasukan per Kategori</CardTitle>
-                        <CardDescription>Total: {{ formatCurrency(totalIncome) }}</CardDescription>
+                        <CardDescription
+                            >Total:
+                            {{ formatCurrency(totalIncome) }}</CardDescription
+                        >
                     </CardHeader>
                     <CardContent>
-                        <div v-if="props.incomeByCategory.length === 0" class="flex h-48 items-center justify-center text-sm text-muted-foreground">
+                        <div
+                            v-if="props.incomeByCategory.length === 0"
+                            class="flex h-48 items-center justify-center text-sm text-muted-foreground"
+                        >
                             Tidak ada data pemasukan.
                         </div>
-                        <div v-else class="flex flex-col items-center gap-6 sm:flex-row">
+                        <div
+                            v-else
+                            class="flex flex-col items-center gap-6 sm:flex-row"
+                        >
                             <!-- Donut -->
                             <svg viewBox="0 0 200 200" class="size-44 shrink-0">
                                 <path
@@ -755,24 +1047,56 @@ const filterDescription = computed(() => {
                                     stroke-width="2"
                                     class="transition-opacity hover:opacity-80"
                                 />
-                                <circle cx="100" cy="100" r="50" fill="var(--color-background)" />
-                                <text x="100" y="96" text-anchor="middle" class="fill-foreground text-lg font-bold" dominant-baseline="middle">
+                                <circle
+                                    cx="100"
+                                    cy="100"
+                                    r="50"
+                                    fill="var(--color-background)"
+                                />
+                                <text
+                                    x="100"
+                                    y="96"
+                                    text-anchor="middle"
+                                    class="fill-foreground text-lg font-bold"
+                                    dominant-baseline="middle"
+                                >
                                     {{ incomeDonutSegments.length }}
                                 </text>
-                                <text x="100" y="114" text-anchor="middle" class="fill-muted-foreground text-[10px]" dominant-baseline="middle">
+                                <text
+                                    x="100"
+                                    y="114"
+                                    text-anchor="middle"
+                                    class="fill-muted-foreground text-[10px]"
+                                    dominant-baseline="middle"
+                                >
                                     kategori
                                 </text>
                             </svg>
                             <!-- Legend -->
                             <div class="flex-1 space-y-2">
-                                <div v-for="seg in incomeDonutSegments" :key="seg.name" class="flex items-center justify-between text-sm">
+                                <div
+                                    v-for="seg in incomeDonutSegments"
+                                    :key="seg.name"
+                                    class="flex items-center justify-between text-sm"
+                                >
                                     <div class="flex items-center gap-2">
-                                        <span class="size-2.5 rounded-full" :style="{ backgroundColor: seg.color }" />
+                                        <span
+                                            class="size-2.5 rounded-full"
+                                            :style="{
+                                                backgroundColor: seg.color,
+                                            }"
+                                        />
                                         <span>{{ seg.name }}</span>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <span class="font-medium">{{ formatCurrency(seg.total) }}</span>
-                                        <Badge variant="outline" class="text-[10px]">{{ seg.percentage }}%</Badge>
+                                        <span class="font-medium">{{
+                                            formatCurrency(seg.total)
+                                        }}</span>
+                                        <Badge
+                                            variant="outline"
+                                            class="text-[10px]"
+                                            >{{ seg.percentage }}%</Badge
+                                        >
                                     </div>
                                 </div>
                             </div>
@@ -785,21 +1109,59 @@ const filterDescription = computed(() => {
             <Card>
                 <CardHeader>
                     <CardTitle>Tren Bulanan</CardTitle>
-                    <CardDescription>Perbandingan pemasukan dan pengeluaran per bulan</CardDescription>
+                    <CardDescription
+                        >Perbandingan pemasukan dan pengeluaran per
+                        bulan</CardDescription
+                    >
                 </CardHeader>
                 <CardContent>
-                    <div v-if="props.monthlyTrend.length === 0" class="flex h-48 items-center justify-center text-sm text-muted-foreground">
+                    <div
+                        v-if="props.monthlyTrend.length === 0"
+                        class="flex h-48 items-center justify-center text-sm text-muted-foreground"
+                    >
                         Tidak ada data.
                     </div>
                     <div v-else class="space-y-3">
-                        <div v-for="trend in props.monthlyTrend" :key="trend.month" class="space-y-1.5">
-                            <div class="flex items-center justify-between text-sm">
-                                <span class="w-16 font-medium">{{ formatMonth(trend.month) }}</span>
+                        <div
+                            v-for="trend in props.monthlyTrend"
+                            :key="trend.month"
+                            class="space-y-1.5"
+                        >
+                            <div
+                                class="flex items-center justify-between text-sm"
+                            >
+                                <span class="w-16 font-medium">{{
+                                    formatMonth(trend.month)
+                                }}</span>
                                 <div class="flex gap-4 text-xs">
-                                    <span class="text-green-600">+{{ formatCurrency(Number(trend.income)) }}</span>
-                                    <span class="text-red-600">-{{ formatCurrency(Number(trend.expense)) }}</span>
-                                    <span class="font-medium" :class="Number(trend.income) - Number(trend.expense) >= 0 ? 'text-green-600' : 'text-red-600'">
-                                        {{ formatCurrency(Number(trend.income) - Number(trend.expense)) }}
+                                    <span class="text-green-600"
+                                        >+{{
+                                            formatCurrency(Number(trend.income))
+                                        }}</span
+                                    >
+                                    <span class="text-red-600"
+                                        >-{{
+                                            formatCurrency(
+                                                Number(trend.expense),
+                                            )
+                                        }}</span
+                                    >
+                                    <span
+                                        class="font-medium"
+                                        :class="
+                                            Number(trend.income) -
+                                                Number(trend.expense) >=
+                                            0
+                                                ? 'text-green-600'
+                                                : 'text-red-600'
+                                        "
+                                    >
+                                        {{
+                                            formatCurrency(
+                                                Number(trend.income) -
+                                                    Number(trend.expense),
+                                            )
+                                        }}
                                     </span>
                                 </div>
                             </div>
@@ -808,14 +1170,20 @@ const filterDescription = computed(() => {
                                     class="h-4 rounded-l-sm bg-green-500/80 transition-all"
                                     :style="{
                                         width: `${(Number(trend.income) / maxMonthlyValue) * 100}%`,
-                                        minWidth: Number(trend.income) > 0 ? '4px' : '0',
+                                        minWidth:
+                                            Number(trend.income) > 0
+                                                ? '4px'
+                                                : '0',
                                     }"
                                 />
                                 <div
                                     class="h-4 rounded-r-sm bg-red-500/80 transition-all"
                                     :style="{
                                         width: `${(Number(trend.expense) / maxMonthlyValue) * 100}%`,
-                                        minWidth: Number(trend.expense) > 0 ? '4px' : '0',
+                                        minWidth:
+                                            Number(trend.expense) > 0
+                                                ? '4px'
+                                                : '0',
                                     }"
                                 />
                             </div>
@@ -833,12 +1201,18 @@ const filterDescription = computed(() => {
                             <ArrowUpCircle class="size-5 text-green-600" />
                             <div>
                                 <CardTitle>Top 5 Pemasukan Tertinggi</CardTitle>
-                                <CardDescription>Transaksi pemasukan terbesar</CardDescription>
+                                <CardDescription
+                                    >Transaksi pemasukan
+                                    terbesar</CardDescription
+                                >
                             </div>
                         </div>
                     </CardHeader>
                     <CardContent class="space-y-3">
-                        <div v-if="props.topIncomes.length === 0" class="flex h-32 items-center justify-center text-sm text-muted-foreground">
+                        <div
+                            v-if="props.topIncomes.length === 0"
+                            class="flex h-32 items-center justify-center text-sm text-muted-foreground"
+                        >
                             Tidak ada data pemasukan.
                         </div>
                         <div
@@ -847,21 +1221,38 @@ const filterDescription = computed(() => {
                             class="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
                         >
                             <div class="flex items-center gap-3">
-                                <span class="flex size-7 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-700 dark:bg-green-950 dark:text-green-400">
+                                <span
+                                    class="flex size-7 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-700 dark:bg-green-950 dark:text-green-400"
+                                >
                                     {{ i + 1 }}
                                 </span>
                                 <div>
-                                    <p class="text-sm font-medium">{{ trx.description }}</p>
-                                    <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                                    <p class="text-sm font-medium">
+                                        {{ trx.description }}
+                                    </p>
+                                    <div
+                                        class="flex items-center gap-2 text-xs text-muted-foreground"
+                                    >
                                         <span>{{ formatDate(trx.date) }}</span>
-                                        <span v-if="trx.category" class="flex items-center gap-1">
-                                            <span class="size-1.5 rounded-full" :style="{ backgroundColor: trx.category.color }" />
+                                        <span
+                                            v-if="trx.category"
+                                            class="flex items-center gap-1"
+                                        >
+                                            <span
+                                                class="size-1.5 rounded-full"
+                                                :style="{
+                                                    backgroundColor:
+                                                        trx.category.color,
+                                                }"
+                                            />
                                             {{ trx.category.name }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <span class="text-sm font-bold text-green-600">+{{ formatCurrency(Number(trx.amount)) }}</span>
+                            <span class="text-sm font-bold text-green-600"
+                                >+{{ formatCurrency(Number(trx.amount)) }}</span
+                            >
                         </div>
                     </CardContent>
                 </Card>
@@ -872,13 +1263,21 @@ const filterDescription = computed(() => {
                         <div class="flex items-center gap-2">
                             <ArrowDownCircle class="size-5 text-red-600" />
                             <div>
-                                <CardTitle>Top 5 Pengeluaran Tertinggi</CardTitle>
-                                <CardDescription>Transaksi pengeluaran terbesar</CardDescription>
+                                <CardTitle
+                                    >Top 5 Pengeluaran Tertinggi</CardTitle
+                                >
+                                <CardDescription
+                                    >Transaksi pengeluaran
+                                    terbesar</CardDescription
+                                >
                             </div>
                         </div>
                     </CardHeader>
                     <CardContent class="space-y-3">
-                        <div v-if="props.topExpenses.length === 0" class="flex h-32 items-center justify-center text-sm text-muted-foreground">
+                        <div
+                            v-if="props.topExpenses.length === 0"
+                            class="flex h-32 items-center justify-center text-sm text-muted-foreground"
+                        >
                             Tidak ada data pengeluaran.
                         </div>
                         <div
@@ -887,21 +1286,38 @@ const filterDescription = computed(() => {
                             class="flex items-center justify-between rounded-lg border p-3 transition-colors hover:bg-muted/50"
                         >
                             <div class="flex items-center gap-3">
-                                <span class="flex size-7 items-center justify-center rounded-full bg-red-100 text-xs font-bold text-red-700 dark:bg-red-950 dark:text-red-400">
+                                <span
+                                    class="flex size-7 items-center justify-center rounded-full bg-red-100 text-xs font-bold text-red-700 dark:bg-red-950 dark:text-red-400"
+                                >
                                     {{ i + 1 }}
                                 </span>
                                 <div>
-                                    <p class="text-sm font-medium">{{ trx.description }}</p>
-                                    <div class="flex items-center gap-2 text-xs text-muted-foreground">
+                                    <p class="text-sm font-medium">
+                                        {{ trx.description }}
+                                    </p>
+                                    <div
+                                        class="flex items-center gap-2 text-xs text-muted-foreground"
+                                    >
                                         <span>{{ formatDate(trx.date) }}</span>
-                                        <span v-if="trx.category" class="flex items-center gap-1">
-                                            <span class="size-1.5 rounded-full" :style="{ backgroundColor: trx.category.color }" />
+                                        <span
+                                            v-if="trx.category"
+                                            class="flex items-center gap-1"
+                                        >
+                                            <span
+                                                class="size-1.5 rounded-full"
+                                                :style="{
+                                                    backgroundColor:
+                                                        trx.category.color,
+                                                }"
+                                            />
                                             {{ trx.category.name }}
                                         </span>
                                     </div>
                                 </div>
                             </div>
-                            <span class="text-sm font-bold text-red-600">-{{ formatCurrency(Number(trx.amount)) }}</span>
+                            <span class="text-sm font-bold text-red-600"
+                                >-{{ formatCurrency(Number(trx.amount)) }}</span
+                            >
                         </div>
                     </CardContent>
                 </Card>

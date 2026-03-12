@@ -116,7 +116,13 @@ export type PlannedTransaction = {
     updated_at: string;
 };
 
-export type SuggestionFocus = 'fitur_baru' | 'pengurangan_fitur' | 'tampilan' | 'performa' | 'keamanan' | 'lainnya';
+export type SuggestionFocus =
+    | 'fitur_baru'
+    | 'pengurangan_fitur'
+    | 'tampilan'
+    | 'performa'
+    | 'keamanan'
+    | 'lainnya';
 
 export type Suggestion = {
     id: number;

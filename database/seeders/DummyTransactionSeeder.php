@@ -109,7 +109,7 @@ class DummyTransactionSeeder extends Seeder
                 ['desc' => 'Air PDAM',                   'min' => 50000,  'max' => 200000],
                 ['desc' => 'Cicilan kredit',             'min' => 500000, 'max' => 2000000],
                 ['desc' => 'Iuran BPJS',                'min' => 150000, 'max' => 300000],
-                ['desc' => 'Sewa kos/kontrakan',         'min' => 1000000,'max' => 3000000],
+                ['desc' => 'Sewa kos/kontrakan',         'min' => 1000000, 'max' => 3000000],
             ],
             'Kesehatan' => [
                 ['desc' => 'Beli obat di apotek',        'min' => 20000,  'max' => 150000],
@@ -147,40 +147,40 @@ class DummyTransactionSeeder extends Seeder
 
         // ── Generate transactions for 12 months ─────────────────────
         $startDate = Carbon::create(2025, 3, 1);
-        $endDate   = Carbon::create(2026, 2, 28);
-        $rows      = [];
-        $now       = now();
+        $endDate = Carbon::create(2026, 2, 28);
+        $rows = [];
+        $now = now();
 
         for ($month = $startDate->copy(); $month->lte($endDate); $month->addMonth()) {
-            $year  = $month->year;
-            $mon   = $month->month;
+            $year = $month->year;
+            $mon = $month->month;
             $daysInMonth = $month->daysInMonth;
 
             // ── 1) INCOME: Gaji on the 25th of each month ───────────
             $gajiTemplate = $templates['Gaji'][0]; // Gaji bulanan
             $rows[] = [
-                'user_id'     => $userId,
+                'user_id' => $userId,
                 'category_id' => $categories['Gaji']->id,
                 'description' => $gajiTemplate['desc'],
-                'amount'      => $this->randomAmount($gajiTemplate['min'], $gajiTemplate['max']),
-                'type'        => 'income',
-                'date'        => Carbon::create($year, $mon, 25)->toDateString(),
-                'created_at'  => $now,
-                'updated_at'  => $now,
+                'amount' => $this->randomAmount($gajiTemplate['min'], $gajiTemplate['max']),
+                'type' => 'income',
+                'date' => Carbon::create($year, $mon, 25)->toDateString(),
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
 
             // Bonus kinerja every 3 months (March, June, Sept, Dec)
             if (in_array($mon, [3, 6, 9, 12])) {
                 $bonusTemplate = $templates['Gaji'][1];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Gaji']->id,
                     'description' => $bonusTemplate['desc'],
-                    'amount'      => $this->randomAmount($bonusTemplate['min'], $bonusTemplate['max']),
-                    'type'        => 'income',
-                    'date'        => Carbon::create($year, $mon, 28)->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($bonusTemplate['min'], $bonusTemplate['max']),
+                    'type' => 'income',
+                    'date' => Carbon::create($year, $mon, 28)->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -188,14 +188,14 @@ class DummyTransactionSeeder extends Seeder
             if ($mon === 6) {
                 $thrTemplate = $templates['Gaji'][2];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Gaji']->id,
                     'description' => $thrTemplate['desc'],
-                    'amount'      => $this->randomAmount($thrTemplate['min'], $thrTemplate['max']),
-                    'type'        => 'income',
-                    'date'        => Carbon::create($year, $mon, 15)->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($thrTemplate['min'], $thrTemplate['max']),
+                    'type' => 'income',
+                    'date' => Carbon::create($year, $mon, 15)->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -204,28 +204,28 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $freelanceCount; $i++) {
                 $tpl = $templates['Freelance'][array_rand($templates['Freelance'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Freelance']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'income',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'income',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
             // ── 3) INCOME: Investasi (1x per month) ─────────────────
             $invTpl = $templates['Investasi'][array_rand($templates['Investasi'])];
             $rows[] = [
-                'user_id'     => $userId,
+                'user_id' => $userId,
                 'category_id' => $categories['Investasi']->id,
                 'description' => $invTpl['desc'],
-                'amount'      => $this->randomAmount($invTpl['min'], $invTpl['max']),
-                'type'        => 'income',
-                'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                'created_at'  => $now,
-                'updated_at'  => $now,
+                'amount' => $this->randomAmount($invTpl['min'], $invTpl['max']),
+                'type' => 'income',
+                'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
 
             // ── 4) EXPENSES: Makanan (daily, 1-3 transactions) ──────
@@ -234,14 +234,14 @@ class DummyTransactionSeeder extends Seeder
                 for ($i = 0; $i < $mealCount; $i++) {
                     $tpl = $templates['Makanan & Minuman'][array_rand($templates['Makanan & Minuman'])];
                     $rows[] = [
-                        'user_id'     => $userId,
+                        'user_id' => $userId,
                         'category_id' => $categories['Makanan & Minuman']->id,
                         'description' => $tpl['desc'],
-                        'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                        'type'        => 'expense',
-                        'date'        => Carbon::create($year, $mon, $day)->toDateString(),
-                        'created_at'  => $now,
-                        'updated_at'  => $now,
+                        'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                        'type' => 'expense',
+                        'date' => Carbon::create($year, $mon, $day)->toDateString(),
+                        'created_at' => $now,
+                        'updated_at' => $now,
                     ];
                 }
             }
@@ -251,28 +251,28 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $transportCount; $i++) {
                 $tpl = $templates['Transportasi'][array_rand($templates['Transportasi'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Transportasi']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
             // ── 6) EXPENSES: Tagihan (monthly bills) ────────────────
             foreach ($templates['Tagihan'] as $tpl) {
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Tagihan']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, min(10, $daysInMonth)))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, min(10, $daysInMonth)))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -281,14 +281,14 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $belanjaCount; $i++) {
                 $tpl = $templates['Belanja'][array_rand($templates['Belanja'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Belanja']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -297,14 +297,14 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $hiburanCount; $i++) {
                 $tpl = $templates['Hiburan'][array_rand($templates['Hiburan'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Hiburan']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -313,14 +313,14 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $kesehatanCount; $i++) {
                 $tpl = $templates['Kesehatan'][array_rand($templates['Kesehatan'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Kesehatan']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -329,14 +329,14 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $pendidikanCount; $i++) {
                 $tpl = $templates['Pendidikan'][array_rand($templates['Pendidikan'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Pendidikan']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -345,14 +345,14 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $rtCount; $i++) {
                 $tpl = $templates['Rumah Tangga'][array_rand($templates['Rumah Tangga'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Rumah Tangga']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -361,14 +361,14 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $pakaianCount; $i++) {
                 $tpl = $templates['Pakaian'][array_rand($templates['Pakaian'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Pakaian']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
 
@@ -377,14 +377,14 @@ class DummyTransactionSeeder extends Seeder
             for ($i = 0; $i < $donasiCount; $i++) {
                 $tpl = $templates['Donasi'][array_rand($templates['Donasi'])];
                 $rows[] = [
-                    'user_id'     => $userId,
+                    'user_id' => $userId,
                     'category_id' => $categories['Donasi']->id,
                     'description' => $tpl['desc'],
-                    'amount'      => $this->randomAmount($tpl['min'], $tpl['max']),
-                    'type'        => 'expense',
-                    'date'        => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
-                    'created_at'  => $now,
-                    'updated_at'  => $now,
+                    'amount' => $this->randomAmount($tpl['min'], $tpl['max']),
+                    'type' => 'expense',
+                    'date' => Carbon::create($year, $mon, rand(1, $daysInMonth))->toDateString(),
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ];
             }
         }
@@ -395,7 +395,7 @@ class DummyTransactionSeeder extends Seeder
             Transaction::insert($chunk);
         }
 
-        $this->command->info("✅ Seeded " . count($rows) . " transactions for user_id={$userId} (March 2025 – February 2026)");
+        $this->command->info('✅ Seeded '.count($rows)." transactions for user_id={$userId} (March 2025 – February 2026)");
     }
 
     /**

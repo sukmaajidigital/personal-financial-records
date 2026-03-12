@@ -19,7 +19,14 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import AppLayout from '@/layouts/AppLayout.vue';
 import type { BreadcrumbItem, Category } from '@/types';
 
@@ -98,8 +105,13 @@ function submitDelete() {
 
     <AppLayout :breadcrumbs="breadcrumbs">
         <div class="flex flex-col gap-6 p-4 md:p-6">
-            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <Heading title="Kategori" description="Kelola kategori untuk transaksi keuangan Anda." />
+            <div
+                class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+            >
+                <Heading
+                    title="Kategori"
+                    description="Kelola kategori untuk transaksi keuangan Anda."
+                />
 
                 <Dialog v-model:open="showCreateDialog">
                     <DialogTrigger as-child>
@@ -112,28 +124,51 @@ function submitDelete() {
                         <DialogHeader>
                             <DialogTitle>Tambah Kategori Baru</DialogTitle>
                             <DialogDescription>
-                                Buat kategori baru untuk mengelompokkan transaksi Anda.
+                                Buat kategori baru untuk mengelompokkan
+                                transaksi Anda.
                             </DialogDescription>
                         </DialogHeader>
                         <form @submit.prevent="submitCreate" class="space-y-4">
                             <div class="grid gap-2">
                                 <Label for="create-name">Nama Kategori</Label>
-                                <Input id="create-name" v-model="createForm.name" placeholder="Contoh: Makanan" required />
+                                <Input
+                                    id="create-name"
+                                    v-model="createForm.name"
+                                    placeholder="Contoh: Makanan"
+                                    required
+                                />
                                 <InputError :message="createForm.errors.name" />
                             </div>
                             <div class="grid gap-2">
                                 <Label for="create-color">Warna</Label>
                                 <div class="flex items-center gap-3">
-                                    <input id="create-color" v-model="createForm.color" type="color" class="h-10 w-14 cursor-pointer rounded-md border" />
-                                    <Input v-model="createForm.color" class="flex-1 font-mono" maxlength="7" />
+                                    <input
+                                        id="create-color"
+                                        v-model="createForm.color"
+                                        type="color"
+                                        class="h-10 w-14 cursor-pointer rounded-md border"
+                                    />
+                                    <Input
+                                        v-model="createForm.color"
+                                        class="flex-1 font-mono"
+                                        maxlength="7"
+                                    />
                                 </div>
-                                <InputError :message="createForm.errors.color" />
+                                <InputError
+                                    :message="createForm.errors.color"
+                                />
                             </div>
                             <DialogFooter>
                                 <DialogClose as-child>
-                                    <Button type="button" variant="outline">Batal</Button>
+                                    <Button type="button" variant="outline"
+                                        >Batal</Button
+                                    >
                                 </DialogClose>
-                                <Button type="submit" :disabled="createForm.processing">Simpan</Button>
+                                <Button
+                                    type="submit"
+                                    :disabled="createForm.processing"
+                                    >Simpan</Button
+                                >
                             </DialogFooter>
                         </form>
                     </DialogContent>
@@ -141,30 +176,56 @@ function submitDelete() {
             </div>
 
             <!-- Error display -->
-            <div v-if="page.props.errors && (page.props.errors as Record<string, string>).category" class="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
-                {{ (page.props.errors as Record<string, string>).category }}
+            <div
+                v-if="page.props.errors && page.props.errors.category"
+                class="rounded-md border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+            >
+                {{ page.props.errors.category }}
             </div>
 
             <Card>
                 <CardContent class="p-0">
                     <!-- Mobile cards -->
                     <div class="block md:hidden">
-                        <div v-if="props.categories.length === 0" class="p-6 text-center text-sm text-muted-foreground">
+                        <div
+                            v-if="props.categories.length === 0"
+                            class="p-6 text-center text-sm text-muted-foreground"
+                        >
                             Belum ada kategori. Tambahkan kategori pertama Anda!
                         </div>
-                        <div v-for="category in props.categories" :key="category.id" class="flex items-center justify-between border-b p-4 last:border-b-0">
+                        <div
+                            v-for="category in props.categories"
+                            :key="category.id"
+                            class="flex items-center justify-between border-b p-4 last:border-b-0"
+                        >
                             <div class="flex items-center gap-3">
-                                <div class="size-4 rounded-full" :style="{ backgroundColor: category.color }" />
+                                <div
+                                    class="size-4 rounded-full"
+                                    :style="{ backgroundColor: category.color }"
+                                />
                                 <div>
-                                    <p class="font-medium">{{ category.name }}</p>
-                                    <p class="text-xs text-muted-foreground">{{ category.transactions_count ?? 0 }} transaksi</p>
+                                    <p class="font-medium">
+                                        {{ category.name }}
+                                    </p>
+                                    <p class="text-xs text-muted-foreground">
+                                        {{ category.transactions_count ?? 0 }}
+                                        transaksi
+                                    </p>
                                 </div>
                             </div>
                             <div class="flex items-center gap-1">
-                                <Button variant="ghost" size="icon" @click="openEdit(category)">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    @click="openEdit(category)"
+                                >
                                     <Pencil class="size-4" />
                                 </Button>
-                                <Button variant="ghost" size="icon" @click="openDelete(category)">
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    @click="openDelete(category)"
+                                >
                                     <Trash2 class="size-4 text-destructive" />
                                 </Button>
                             </div>
@@ -178,31 +239,61 @@ function submitDelete() {
                                 <TableRow>
                                     <TableHead class="w-12">Warna</TableHead>
                                     <TableHead>Nama</TableHead>
-                                    <TableHead class="text-center">Jumlah Transaksi</TableHead>
-                                    <TableHead class="w-28 text-right">Aksi</TableHead>
+                                    <TableHead class="text-center"
+                                        >Jumlah Transaksi</TableHead
+                                    >
+                                    <TableHead class="w-28 text-right"
+                                        >Aksi</TableHead
+                                    >
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 <TableRow v-if="props.categories.length === 0">
-                                    <TableCell :colspan="4" class="text-center text-muted-foreground">
-                                        Belum ada kategori. Tambahkan kategori pertama Anda!
+                                    <TableCell
+                                        :colspan="4"
+                                        class="text-center text-muted-foreground"
+                                    >
+                                        Belum ada kategori. Tambahkan kategori
+                                        pertama Anda!
                                     </TableCell>
                                 </TableRow>
-                                <TableRow v-for="category in props.categories" :key="category.id">
+                                <TableRow
+                                    v-for="category in props.categories"
+                                    :key="category.id"
+                                >
                                     <TableCell>
-                                        <div class="size-5 rounded-full" :style="{ backgroundColor: category.color }" />
+                                        <div
+                                            class="size-5 rounded-full"
+                                            :style="{
+                                                backgroundColor: category.color,
+                                            }"
+                                        />
                                     </TableCell>
-                                    <TableCell class="font-medium">{{ category.name }}</TableCell>
+                                    <TableCell class="font-medium">{{
+                                        category.name
+                                    }}</TableCell>
                                     <TableCell class="text-center">
-                                        <Badge variant="secondary">{{ category.transactions_count ?? 0 }}</Badge>
+                                        <Badge variant="secondary">{{
+                                            category.transactions_count ?? 0
+                                        }}</Badge>
                                     </TableCell>
                                     <TableCell class="text-right">
                                         <div class="flex justify-end gap-1">
-                                            <Button variant="ghost" size="icon" @click="openEdit(category)">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                @click="openEdit(category)"
+                                            >
                                                 <Pencil class="size-4" />
                                             </Button>
-                                            <Button variant="ghost" size="icon" @click="openDelete(category)">
-                                                <Trash2 class="size-4 text-destructive" />
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                @click="openDelete(category)"
+                                            >
+                                                <Trash2
+                                                    class="size-4 text-destructive"
+                                                />
                                             </Button>
                                         </div>
                                     </TableCell>
@@ -219,27 +310,47 @@ function submitDelete() {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Edit Kategori</DialogTitle>
-                    <DialogDescription>Perbarui informasi kategori.</DialogDescription>
+                    <DialogDescription
+                        >Perbarui informasi kategori.</DialogDescription
+                    >
                 </DialogHeader>
                 <form @submit.prevent="submitEdit" class="space-y-4">
                     <div class="grid gap-2">
                         <Label for="edit-name">Nama Kategori</Label>
-                        <Input id="edit-name" v-model="editForm.name" placeholder="Contoh: Makanan" required />
+                        <Input
+                            id="edit-name"
+                            v-model="editForm.name"
+                            placeholder="Contoh: Makanan"
+                            required
+                        />
                         <InputError :message="editForm.errors.name" />
                     </div>
                     <div class="grid gap-2">
                         <Label for="edit-color">Warna</Label>
                         <div class="flex items-center gap-3">
-                            <input id="edit-color" v-model="editForm.color" type="color" class="h-10 w-14 cursor-pointer rounded-md border" />
-                            <Input v-model="editForm.color" class="flex-1 font-mono" maxlength="7" />
+                            <input
+                                id="edit-color"
+                                v-model="editForm.color"
+                                type="color"
+                                class="h-10 w-14 cursor-pointer rounded-md border"
+                            />
+                            <Input
+                                v-model="editForm.color"
+                                class="flex-1 font-mono"
+                                maxlength="7"
+                            />
                         </div>
                         <InputError :message="editForm.errors.color" />
                     </div>
                     <DialogFooter>
                         <DialogClose as-child>
-                            <Button type="button" variant="outline">Batal</Button>
+                            <Button type="button" variant="outline"
+                                >Batal</Button
+                            >
                         </DialogClose>
-                        <Button type="submit" :disabled="editForm.processing">Perbarui</Button>
+                        <Button type="submit" :disabled="editForm.processing"
+                            >Perbarui</Button
+                        >
                     </DialogFooter>
                 </form>
             </DialogContent>
@@ -252,14 +363,17 @@ function submitDelete() {
                     <DialogTitle>Hapus Kategori</DialogTitle>
                     <DialogDescription>
                         Apakah Anda yakin ingin menghapus kategori
-                        <strong>{{ deletingCategory?.name }}</strong>? Tindakan ini tidak dapat dibatalkan.
+                        <strong>{{ deletingCategory?.name }}</strong
+                        >? Tindakan ini tidak dapat dibatalkan.
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
                     <DialogClose as-child>
                         <Button variant="outline">Batal</Button>
                     </DialogClose>
-                    <Button variant="destructive" @click="submitDelete">Hapus</Button>
+                    <Button variant="destructive" @click="submitDelete"
+                        >Hapus</Button
+                    >
                 </DialogFooter>
             </DialogContent>
         </Dialog>

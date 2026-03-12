@@ -6,7 +6,6 @@ import {
     MessageSquarePlus,
     Sparkles,
     TrendingUp,
-    X,
     Check,
 } from 'lucide-vue-next';
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
@@ -68,14 +67,20 @@ type FeatureNotification = {
 } | null;
 
 const page = usePage();
-const notification = computed(() => page.props.featureNotification as FeatureNotification);
+const notification = computed(
+    () => page.props.featureNotification as FeatureNotification,
+);
 const showNotification = ref(false);
 const dismissing = ref(false);
 
 // Show notification on mount if available
-watch(notification, (val) => {
-    if (val) showNotification.value = true;
-}, { immediate: true });
+watch(
+    notification,
+    (val) => {
+        if (val) showNotification.value = true;
+    },
+    { immediate: true },
+);
 
 const iconComponents: Record<string, any> = {
     'clipboard-list': ClipboardList,
@@ -90,16 +95,20 @@ function getIcon(name: string) {
 
 function dismissNotification() {
     dismissing.value = true;
-    router.post('/dismiss-notification', {}, {
-        preserveScroll: true,
-        onSuccess: () => {
-            showNotification.value = false;
-            dismissing.value = false;
+    router.post(
+        '/dismiss-notification',
+        {},
+        {
+            preserveScroll: true,
+            onSuccess: () => {
+                showNotification.value = false;
+                dismissing.value = false;
+            },
+            onError: () => {
+                dismissing.value = false;
+            },
         },
-        onError: () => {
-            dismissing.value = false;
-        },
-    });
+    );
 }
 </script>
 
@@ -115,14 +124,15 @@ function dismissNotification() {
 
     <!-- Feature Update Notification Modal -->
     <Dialog v-model:open="showNotification">
-        <DialogContent class="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+        <DialogContent class="max-h-[85vh] overflow-y-auto sm:max-w-lg">
             <DialogHeader>
                 <DialogTitle class="flex items-center gap-2 text-lg">
                     <Sparkles class="size-5 text-amber-500" />
                     {{ notification?.title }}
                 </DialogTitle>
                 <DialogDescription>
-                    Berikut adalah fitur-fitur baru yang telah ditambahkan ke aplikasi.
+                    Berikut adalah fitur-fitur baru yang telah ditambahkan ke
+                    aplikasi.
                 </DialogDescription>
             </DialogHeader>
 
@@ -133,19 +143,33 @@ function dismissNotification() {
                     class="rounded-lg border p-4 transition-colors hover:bg-muted/50"
                 >
                     <div class="flex items-start gap-3">
-                        <div class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                            <component :is="getIcon(feature.icon)" class="size-4.5" />
+                        <div
+                            class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"
+                        >
+                            <component
+                                :is="getIcon(feature.icon)"
+                                class="size-4.5"
+                            />
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <h4 class="font-semibold text-sm">{{ feature.title }}</h4>
-                            <p class="text-xs text-muted-foreground mt-0.5">{{ feature.description }}</p>
-                            <ul v-if="feature.details?.length" class="mt-2 space-y-1">
+                        <div class="min-w-0 flex-1">
+                            <h4 class="text-sm font-semibold">
+                                {{ feature.title }}
+                            </h4>
+                            <p class="mt-0.5 text-xs text-muted-foreground">
+                                {{ feature.description }}
+                            </p>
+                            <ul
+                                v-if="feature.details?.length"
+                                class="mt-2 space-y-1"
+                            >
                                 <li
                                     v-for="(detail, dIdx) in feature.details"
                                     :key="dIdx"
                                     class="flex items-start gap-2 text-xs text-muted-foreground"
                                 >
-                                    <Check class="size-3 shrink-0 text-green-500 mt-0.5" />
+                                    <Check
+                                        class="mt-0.5 size-3 shrink-0 text-green-500"
+                                    />
                                     <span>{{ detail }}</span>
                                 </li>
                             </ul>
