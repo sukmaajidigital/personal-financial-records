@@ -50,7 +50,7 @@ const form = useForm({
     description: props.plannedTransaction.description,
     amount: props.plannedTransaction.amount,
     type: props.plannedTransaction.type as 'income' | 'expense',
-    planned_date: props.plannedTransaction.planned_date,
+    planned_date: props.plannedTransaction.planned_date?.split('T')[0] ?? '',
     notes: props.plannedTransaction.notes || '',
 });
 
