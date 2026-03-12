@@ -3,8 +3,6 @@ import { Head, Link, router } from '@inertiajs/vue3';
 import {
     ArrowDownCircle,
     ArrowUpCircle,
-    ChevronLeft,
-    ChevronRight,
     Pencil,
     Plus,
     Search,
@@ -74,7 +72,7 @@ const deletingTransaction = ref<Transaction | null>(null);
 
 let searchTimeout: ReturnType<typeof setTimeout>;
 
-watch(search, (value) => {
+watch(search, () => {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => applyFilters(), 300);
 });

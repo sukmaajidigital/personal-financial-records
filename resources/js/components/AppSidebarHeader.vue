@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { Moon, Sun } from 'lucide-vue-next';
 import Breadcrumbs from '@/components/Breadcrumbs.vue';
 import { Button } from '@/components/ui/button';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { useAppearance } from '@/composables/useAppearance';
 import type { BreadcrumbItem } from '@/types';
-import { Moon, Sun } from 'lucide-vue-next';
 
 withDefaults(
     defineProps<{

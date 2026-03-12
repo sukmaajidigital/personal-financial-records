@@ -6,7 +6,6 @@ import {
     MessageSquarePlus,
     Plus,
     Trash2,
-    Image as ImageIcon,
 } from 'lucide-vue-next';
 import { ref } from 'vue';
 import { Badge } from '@/components/ui/badge';
@@ -14,7 +13,6 @@ import { Button } from '@/components/ui/button';
 import {
     Card,
     CardContent,
-    CardHeader,
 } from '@/components/ui/card';
 import {
     Dialog,
@@ -283,9 +281,9 @@ function formatDate(date: string): string {
                         :variant="link.active ? 'default' : 'outline'"
                         as-child
                     >
-                        <Link :href="link.url" v-html="link.label" />
+                        <Link :href="link.url"><span v-html="link.label" /></Link>
                     </Button>
-                    <Button v-else size="sm" variant="outline" disabled v-html="link.label" />
+                    <Button v-else size="sm" variant="outline" disabled><span v-html="link.label" /></Button>
                 </template>
             </div>
         </div>

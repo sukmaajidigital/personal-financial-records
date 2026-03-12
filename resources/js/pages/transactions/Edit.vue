@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ArrowLeft, Plus } from 'lucide-vue-next';
 import { ref } from 'vue';
 import Heading from '@/components/Heading.vue';
@@ -9,7 +9,6 @@ import {
     Card,
     CardContent,
     CardFooter,
-    CardHeader,
 } from '@/components/ui/card';
 import {
     Dialog,
