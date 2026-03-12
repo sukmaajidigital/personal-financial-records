@@ -37,8 +37,8 @@ class DashboardController extends Controller
             ->get();
 
         $monthlyTrend = $monthlyTrend
-            ->groupBy(fn($transaction) => $transaction->date->format('Y-m'))
-            ->map(fn($transactions, $month) => [
+            ->groupBy(fn ($transaction) => $transaction->date->format('Y-m'))
+            ->map(fn ($transactions, $month) => [
                 'month' => $month,
                 'income' => (float) $transactions->where('type', 'income')->sum('amount'),
                 'expense' => (float) $transactions->where('type', 'expense')->sum('amount'),
