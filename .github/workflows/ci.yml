@@ -18,6 +18,9 @@ jobs:
   php-tests:
     name: PHP 8.4 · Laravel tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      COMPOSER_CACHE_DIR: ~/.composer/cache/files
 
     steps:
       - name: Checkout code
@@ -31,16 +34,16 @@ jobs:
           extensions: mbstring, pdo_sqlite, sqlite3, dom, curl
           tools: composer:v2
 
-      - name: Cache Composer dependencies
+      - name: Cache Composer downloads
         uses: actions/cache@v4
         with:
-          path: vendor
-          key: composer-${{ runner.os }}-${{ hashFiles('composer.lock') }}
+          path: ${{ env.COMPOSER_CACHE_DIR }}
+          key: composer-${{ runner.os }}-php-8.4-${{ hashFiles('composer.lock') }}
           restore-keys: |
-            composer-${{ runner.os }}-
+            composer-${{ runner.os }}-php-8.4-
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist --no-progress
+        run: composer install --no-interaction --prefer-dist --no-progress --optimize-autoloader
 
       - name: Prepare application
         run: |
@@ -53,6 +56,9 @@ jobs:
   frontend-checks:
     name: Node · Vue frontend checks
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: true
 
     steps:
       - name: Checkout code
@@ -63,9 +69,10 @@ jobs:
         with:
           node-version: '22'
           cache: npm
+          cache-dependency-path: package-lock.json
 
       - name: Install npm dependencies
-        run: npm ci
+        run: npm ci --prefer-offline --no-audit
 
       - name: Check code formatting
         run: npm run format:check
