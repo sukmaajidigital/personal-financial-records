@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PlannedTransactionRequest;
 use App\Models\PlannedTransaction;
-use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -25,7 +24,11 @@ class PlannedTransactionController extends Controller
             ->when($filters['type'] ?? null, function ($query, $type) {
                 $query->where('type', $type);
             })
-            ->latest('planned_date')
+            ->when(($filters['status'] ?? null) === 'draft', function ($query) {
+                $query->orderBy('planned_date');
+            }, function ($query) {
+                $query->latest('planned_date');
+            })
             ->latest('id')
             ->paginate(15)
             ->withQueryString();
