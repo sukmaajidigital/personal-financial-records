@@ -14,6 +14,7 @@ class PlannedTransactionController extends Controller
     public function index(Request $request): Response
     {
         $filters = $request->only(['status', 'type']);
+        $today = now()->toDateString();
 
         $plannedTransactions = $request->user()
             ->plannedTransactions()
@@ -24,11 +25,10 @@ class PlannedTransactionController extends Controller
             ->when($filters['type'] ?? null, function ($query, $type) {
                 $query->where('type', $type);
             })
-            ->when(($filters['status'] ?? null) === 'draft', function ($query) {
-                $query->orderBy('planned_date');
-            }, function ($query) {
-                $query->latest('planned_date');
-            })
+            ->orderByRaw("CASE WHEN status = 'posted' THEN 1 ELSE 0 END")
+            ->orderByRaw("CASE WHEN status = 'draft' AND planned_date >= ? THEN 0 WHEN status = 'draft' THEN 1 ELSE 2 END", [$today])
+            ->orderByRaw("CASE WHEN status = 'draft' AND planned_date >= ? THEN planned_date END ASC", [$today])
+            ->orderByRaw("CASE WHEN status = 'draft' AND planned_date < ? THEN planned_date END DESC", [$today])
             ->latest('id')
             ->paginate(15)
             ->withQueryString();
